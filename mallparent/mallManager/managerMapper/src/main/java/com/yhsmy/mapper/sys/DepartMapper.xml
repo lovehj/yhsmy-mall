@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.sys.DepartMapper">
+    <sql id="departFields">
+       id,name,pid,remark,state,creator,createTime,modifyor,modifyTime
+    </sql>
+
+    <sql id="departTable">
+        smy_depart
+    </sql>
+
+    <insert id="addDepart" parameterType="Depart">
+        insert into <include refid="departTable" />
+        (<include refid="departFields"/>)
+        values
+        (#{id},#{name},#{pid},#{remark},#{state},#{creator},#{createTime},#{modifyor},#{modifyTime})
+    </insert>
+    
+    <resultMap id="departBaseMap" type="Depart">
+        <id property="id" column="id"/>
+        <id property="name" column="name"/>
+        <id property="pid" column="pid" />
+        <id property="remark" column="remark" />
+        <id property="state" column="state" />
+        <id property="creator" column="creator" />
+        <id property="createTime" column="createTime"/>
+        <id property="modifyor" column="modifyor"/>
+        <id property="modifyTime" column="modifyTime"/>
+        <collection property="children" ofType="Depart" column="id" select="findDepartByPid">
+        </collection>
+    </resultMap>
+
+    <select id="findDepartList" resultMap="departBaseMap">
+        select
+        <include refid="departFields" />
+        from <include refid="departTable" />
+        where state > 0
+        <choose>
+            <when test="pid != null and pid != ''.toString()">
+                and pid = #{pid}
+            </when>
+            <otherwise>
+                and (pid is null or pid = '')
+            </otherwise>
+        </choose>
+        <if test="queryBy > 0 and queryText != null and queryText != ''.toString()">
+            and INSTR(name, #{queryText}) > 0
+        </if>
+        order by createTime asc
+    </select>
+
+    <select id="findDepartById" resultType="Depart">
+        select
+        <include refid="departFields" />
+        from <include refid="departTable" />
+        where id = #{id}
+        limit 1
+    </select>
+
+    <select id="findDepartByPid" resultType="Depart">
+        select
+        <include refid="departFields" />
+        from <include refid="departTable" />
+        where pid = #{pid}
+    </select>
+
+</mapper>

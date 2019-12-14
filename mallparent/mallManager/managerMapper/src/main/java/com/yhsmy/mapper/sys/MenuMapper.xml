@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.sys.MenuMapper">
+    <sql id="menuFields">
+        id,name,url,icon,permission,ctype,orderNum,pid,
+        state,creator,createTime,modifyor,modifyTime
+    </sql>
+
+    <sql id="menuTable">
+        smy_menu
+    </sql>
+
+    <sql id="roleMenuTable">
+        smy_role_menu
+    </sql>
+
+    <insert id="addMenu" parameterType="Menu">
+      insert into <include refid="menuTable" />
+        (<include refid="menuFields"/>)
+      values
+        (#{id},#{name},#{url},#{icon},#{permission},#{ctype},#{orderNum},#{pid},
+        #{state},#{creator},#{createTime},#{modifyor},#{modifyTime})
+    </insert>
+
+    <select id="findMenuList" resultType="Menu">
+        select
+        <include refid="menuFields" />
+        from <include refid="menuTable" />
+        where state > 0
+        <if test="pid != null and pid != ''.toString()">
+            and pid = #{pid}
+        </if>
+        order by orderNum asc
+    </select>
+
+    <select id="findMenuListByRoleId" resultType="Menu">
+        select
+        <include refid="menuFields" />
+        from <include refid="menuTable" />
+        left join <include refid="roleMenuTable"/> on rm_menuId = id
+        where state > 0 and rm_roleId = #{roleId}
+        order by orderNum asc
+    </select>
+
+    <select id="findMenuById" resultType="Menu">
+        select
+          <include refid="menuFields" />
+        from <include refid="menuTable" />
+        where id = #{id}
+        limit 1
+    </select>
+
+    <select id="findOrderNumByCtype" resultType="int">
+        select IFNULL(max(orderNum), 0)
+        from <include refid="menuTable" />
+        where ctype = #{ctype}
+        <if test="pid != null and pid != ''.toString()">
+          and pid = #{pid}
+        </if>
+    </select>
+
+
+</mapper>

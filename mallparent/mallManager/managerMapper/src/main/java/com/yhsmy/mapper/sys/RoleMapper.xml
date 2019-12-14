@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.sys.RoleMapper">
+    <sql id="roleFields">
+        roleId,roleName,remark,state,creator,createTime,modifyor,modifyTime
+    </sql>
+
+    <sql id="roleTable">
+        smy_role
+    </sql>
+
+    <sql id="roleMenuTable">
+        smy_role_menu
+    </sql>
+
+    <insert id="addRole" parameterType="Role">
+        insert into <include refid="roleTable" />
+        (<include refid="roleFields"/>)
+        values
+        (#{roleId},#{roleName},#{remark},#{state},#{creator},#{createTime},#{modifyor},#{modifyTime})
+    </insert>
+
+    <select id="findRoleList" resultType="Role">
+      select <include refid="roleFields"/>
+        from <include refid="roleTable" />
+        where state > 0
+        <if test="queryBy > 0 and queryText != null and queryText != ''.toString()">
+            <if test="queryBy == 1">
+                and INSTR(roleName, #{queryText}) > 0
+          </if>
+        </if>
+        order by createTime asc
+    </select>
+
+    <select id="findRoleById" resultType="Role">
+        select
+        <include refid="roleFields" />
+        from <include refid="roleTable" />
+        where roleId = #{roleId}
+    </select>
+
+    <insert id="addRoleMenu">
+        insert into <include refid="roleMenuTable"/>
+          (rm_roleId,rm_menuId)
+        values 
+        <foreach collection="menuIdList" separator="," item="mId">
+            (#{roleId},#{mId})
+        </foreach>
+    </insert>
+
+</mapper>

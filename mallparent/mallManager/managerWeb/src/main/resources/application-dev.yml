@@ -1,0 +1,86 @@
+#配置日志
+logging:
+  file: /D:/logs/yhsmy.log
+  level:
+    com.yhsmy: debug
+#配置数据源
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.210:3306/yhsmy?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+    username: root
+    password: lzy900215
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000 # 配置获取连接等待超时的时间
+    timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    minEvictableIdleTimeMillis: 30000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
+    maxPoolPreparedStatementPerConnectionSize: 20 # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+    asyncInit: true # 如果有initialSize数量较多时，打开会加快应用启动时间
+    druid: # 监控配置
+      web-stat-filter: #是否启用StatFilter默认值true
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+        session-stat-enable: false
+        session-stat-max-count: 1000
+        principal-session-name: admin
+        principal-cookie-name: admin
+        #配置profileEnable能够监控单个url调用的sql列表
+        profile-enable: true
+      #根据配置中的url-pattern来访问内置监控页面，如果是上面的配置，内置监控页面的首页是/druid/index.html例如：
+      #http://110.76.43.235:9000/druid/index.html
+      #http://110.76.43.235:8080/mini-web/druid/index.html
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        #允许清空统计数据
+        reset-enable: true
+        login-username: admin
+        login-password: admin
+        #StatViewSerlvet展示出来的监控信息比较敏感，是系统运行的内部情况，如果你需要做访问控制，可以配置allow和deny这两个参数
+        #deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝。如果allow没有配置或者为空，则允许所有访问
+        #配置的格式
+        #<IP>或者<IP>/<SUB_NET_MASK_size>其中128.242.127.1/24
+        #24表示，前面24位是子网掩码，比对的时候，前面24位相同就匹配,不支持IPV6。
+        #allow:
+        #deny:
+  #配置redis
+  redis:
+    host: 192.168.1.210
+    port: 6379
+    database: 0
+    timeout: 10000ms # 超时连接(默认为毫秒)
+    lettuce:
+      pool:
+        max-active: 200 # 连接池最大连接数（使用负值表示没有限制）
+        max-idle: 20 # 连接池中的最大空闲连接
+        min-idle: 0 # 连接池中的最小空闲连接
+        max-wait: 10000ms # 连接池最大阻塞等待时间（使用负值表示没有限制）
+
+# 配置fastdfs
+fdfs:
+  connect-timeout: 601
+  so-timeout: 1501
+  thumb-image:
+    width: 150
+    height: 150
+  web-server-url: 192.168.1.210:8400 #这里配置的是nginx代理后的地址
+  tracker-list:
+    - 192.168.1.210:22122
+  pool:
+    max-total: -1  #从池中借出的对象的最大数目（配置为-1表示不限制）
+    max-wait-millis: 5000 #获取连接时的最大等待毫秒数(默认配置为5秒)
+    max-total-per-key: 50 #每个key最大连接数
+    max-idle-per-key: 10 #每个key对应的连接池最大空闲连接数
+    max_idle_per_key: 5 #每个key对应的连接池最小空闲连接数

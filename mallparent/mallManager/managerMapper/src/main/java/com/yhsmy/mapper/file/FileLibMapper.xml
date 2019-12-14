@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.file.FileLibMapper">
+    <sql id="fileFields">
+       id,userId,tableId,tableName,tableType,fileName,filePath,fileSize,contentType,remark,state,creator,createTime
+    </sql>
+
+    <sql id="fileTable">
+        smy_file_lib
+    </sql>
+
+    <insert id="addFile" parameterType="FileLib">
+        insert into <include refid="fileTable" />
+        (<include refid="fileFields"/>)
+        values
+        (#{id},#{userId},#{tableId},#{tableName},#{tableType},#{fileName},#{filePath},#{fileSize},
+        #{contentType},#{remark},#{state},#{creator},#{createTime})
+    </insert>
+
+    <select id="findFileLibById" resultType="FileLib">
+        select <include refid="fileFields"/>
+        from <include refid="fileTable"/>
+        where id = #{id}
+        limit 1
+    </select>
+
+    <select id="findFileLibList" resultType="FileLib">
+        select <include refid="fileFields"/>
+        from <include refid="fileTable"/>
+        where state > 0
+        <if test="tableId != null and tableId != ''.toString()">
+           and tableId = #{tableId}
+        </if>
+
+        <if test="tableName != null and tableName != ''.toString()">
+            and tableName = #{tableName}
+        </if>
+
+        <if test="tableType > -1">
+            and tableType = #{tableType}
+        </if>
+    </select>
+
+
+
+</mapper>

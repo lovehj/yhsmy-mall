@@ -1,0 +1,32 @@
+server:
+  port: 8900
+
+# 激活环境
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 5MB #单个文件的最大值
+      max-request-size: 50MB # 上传文件总的最大值
+      enabled: true
+
+  # freemarker配置
+  freemarker:
+    template-loader-path: classpath:/templates/
+    cache: false
+    charset: UTF-8
+    check-template-location: true
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    request-context-attribute: request
+    suffix: .ftl
+
+#配置mybatis
+mybatis:
+  type-aliases-package: com.yhsmy.entity.vo.*
+  mapper-locations: classpath*:com/yhsmy/mapper/**/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true #开启驼峰命名法自动转换
+

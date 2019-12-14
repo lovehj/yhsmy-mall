@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.sys.LogMapper">
+    <sql id="logFields">
+       logId,operator,operaType,formIp,formDevice,browser,browserVersion,remark,requestMethod,requestParams,exceptionMessage,state,createTime
+    </sql>
+
+    <sql id="logTable">
+        smy_log
+    </sql>
+
+    <insert id="addLog" parameterType="Log">
+        insert into <include refid="logTable" />
+        (<include refid="logFields"/>)
+        values
+        (#{logId},#{operator},#{operaType},#{formIp},#{formDevice},#{browser},#{browserVersion},#{remark},#{requestMethod},#{requestParams},#{exceptionMessage},#{state},#{createTime})
+    </insert>
+
+    <select id="findLogList" resultType="Log">
+        select
+          <include refid="logFields"/>
+        from <include refid="logTable" />
+        where state > 0
+        <if test="queryBy > 0 and queryText != null and queryText != ''.toString()">
+            <if test="queryBy == 1">
+                and INSTR(operator, #{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 2">
+                and INSTR(operaType, #{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 3">
+                and INSTR(formDevice, #{queryText}) > 0
+            </if>
+        </if>
+
+        <if test="queryDate > 0 ">
+            <if test="startDate != null and startDate != ''.toString()">
+                <![CDATA[ and createTime >= #{startDate} ]]>
+            </if>
+
+            <if test="endDate != null and endDate != ''.toString()">
+                <![CDATA[ and createTime <= #{endDate} ]]>
+            </if>
+        </if>
+        order by createTime desc
+    </select>
+
+</mapper>

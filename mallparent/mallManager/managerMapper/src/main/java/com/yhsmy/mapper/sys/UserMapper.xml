@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.sys.UserMapper">
+    <sql id="userFields">
+        id,username,password,realName,openId,departId,roleId,mobile,email,photo,
+        state,creator,createTime,modifyor,modifyTime
+    </sql>
+
+    <sql id="userAliasFields">
+        u.id,u.username,u.password,u.realName,u.openId,u.departId,u.roleId,u.mobile,u.email,u.photo,
+        u.state,u.creator,u.createTime,u.modifyor,u.modifyTime
+    </sql>
+
+    <sql id="userTable">
+        smy_user
+    </sql>
+
+    <sql id="departTable">
+        smy_depart
+    </sql>
+    <sql id="roleTable">
+        smy_role
+    </sql>
+
+    <insert id="addUser" parameterType="User">
+      insert into <include refid="userTable" />
+        (<include refid="userFields"/>)
+      values
+        (#{id},#{username},#{password},#{realName},#{openId},#{departId},#{roleId},#{mobile},
+        #{email},#{photo},#{state},#{creator},#{createTime},#{modifyor},#{modifyTime})
+    </insert>
+
+    <select id="findUserByLogin" resultType="User">
+        select
+          <include refid="userFields" />
+        from <include refid="userTable" />
+        where state > 0 and state != 2
+        <if test="ctype lte 0">
+            and username = #{queryText}
+        </if>
+
+        <if test="ctype == 1">
+            and mobile = #{queryText}
+        </if>
+
+        <if test="ctype == 2">
+            and email = #{queryText}
+        </if>
+
+        <if test="ctype == 3">
+            and openId = #{queryText}
+        </if>
+        limit 1
+    </select>
+
+
+    <select id="findUserById" resultType="User">
+        select
+        <include refid="userFields" />
+        from <include refid="userTable" />
+        where state > 0 and id = #{id}
+        limit 1
+    </select>
+
+    <select id="findUserList" resultType="User">
+        select
+        <include refid="userAliasFields" />,d.name as departName,r.roleName as roleName
+        from <include refid="userTable" /> as u
+        left join <include refid="departTable"/> d on d.id = u.departId
+        left join <include refid="roleTable"/> r on r.roleId = u.roleId
+        where u.state > 0
+        <if test="state > 0">
+            and u.state = #{state}
+        </if>
+        <if test="queryText != null and queryText != ''.toString()">
+            <if test="queryBy lte 0">
+                and username = #{queryText}
+            </if>
+
+            <if test="queryBy == 1">
+                and mobile = #{queryText}
+            </if>
+
+            <if test="queryBy == 2">
+                and email = #{queryText}
+            </if>
+
+            <if test="queryBy == 3">
+                and openId = #{queryText}
+            </if>
+        </if>
+    </select>
+
+
+</mapper>

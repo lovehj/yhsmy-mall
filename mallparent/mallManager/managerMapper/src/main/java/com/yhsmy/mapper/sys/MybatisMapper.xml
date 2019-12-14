@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.sys.MybatisMapper">
+    <sql id="updateFields">
+        <choose>
+            <when test="field.setNull">
+                ${field.name} = null
+            </when>
+            <otherwise>
+                <if test="field.num > 0">
+                    <!-- update xx set aa = aa + 1 这种格式 -->
+                    ${field.name} = ${field.name} ${field.operator} ${field.num}
+                </if>
+                <if test="field.floatNum > 0">
+                    ${field.name} = ${field.name} ${field.operator}
+                    ${field.floatNum}
+                </if>
+
+                <if test="field.num == 0 and field.floatNum == 0 ">
+                    <if test="field.value != null and !field.sqlFrag">
+                        ${field.name} = #{field.value}
+                    </if>
+
+                    <choose>
+                        <when test="field.localDateValue != null and field.localDateTimeValue == null and field.localTimeValue == null">
+                            ${field.name} = #{field.localDateValue}
+                        </when>
+                        <when
+                                test="field.localDateTimeValue != null and field.localDateValue == null and field.localTimeValue == null">
+                            ${field.name} = #{field.localDateTimeValue}
+                        </when>
+                        <when test="field.localTimeValue != null and field.localDateTimeValue != null and field.localDateValue == null">
+                            ${field.name} = #{field.localTimeValue}
+                        </when>
+                        <otherwise></otherwise>
+                    </choose>
+                </if>
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="updateWhere">
+        <if test="w.operator=='in'.toString()">
+            ${w.name} in ( ${w.value} )
+        </if>
+        <if test="w.operator!='in'.toString()">
+            ${w.name} ${w.operator} #{w.value}
+        </if>
+    </sql>
+
+    <update id="update" parameterType="UpdateMap">
+        update ${table} set
+        <foreach collection="fields" separator="," item="field">
+            <include refid="updateFields"/>
+        </foreach>
+        where
+        <foreach collection="where" separator="and" item="w">
+            <include refid="updateWhere"/>
+        </foreach>
+    </update>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" separator=";" item="updateMap">
+            update ${updateMap.table} set
+            <foreach collection="updateMap.fields" separator="," item="field">
+                <include refid="updateFields"/>
+            </foreach>
+            where
+            <foreach collection="updateMap.where" separator="and" item="w">
+                <include refid="updateWhere"/>
+            </foreach>
+        </foreach>
+    </update>
+
+    <sql id="deleteWhere">
+        <if test="w.operator=='in'.toString()">
+            ${w.name} in ( ${w.value} )
+        </if>
+        <if test="w.operator!='in'.toString()">
+            ${w.name} ${w.operator} #{w.value}
+        </if>
+    </sql>
+    <delete id="delete" parameterType="UpdateMap">
+        delete from ${table}
+        where
+        <foreach collection="where" separator="and" item="w">
+            <include refid="deleteWhere"/>
+        </foreach>
+    </delete>
+
+    <delete id="batchDelete" parameterType="java.util.List">
+        <foreach collection="list" separator=";" item="updateMap">
+            delete from ${updateMap.table}
+            where
+            <foreach collection="updateMap.where" separator="and" item="w">
+                <include refid="deleteWhere"/>
+            </foreach>
+        </foreach>
+    </delete>
+
+</mapper>

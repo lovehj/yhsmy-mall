@@ -1,0 +1,185 @@
+/**
+ * @param id 弹窗ID
+ * @param title 标题
+ * @param url 请求的url
+ * @param w 弹出层宽度（缺省调默认值）
+ * @param h 弹出层高度（缺省调默认值）
+ */
+function popup(id, title, url, w, h) {
+    if (id == 'undefined' || id == '' || id == null) {
+        id = "timestemp" + (Math.random() + new Date().getTime());
+    }
+
+    if (title == null || title == '') {
+        title = false;
+    }
+
+    if (url == null || url == '') {
+        url = "/error/404";
+    }
+
+    if (w == null || w == '') {
+        w = ($(window).width() * 0.9);
+    }
+
+    if (h == null || h == '') {
+        h = ($(window).height() - 50);
+    }
+    layer.open({
+        id: id,
+        type: 2,
+        area: [w + 'px', h + 'px'],
+        fix: false,
+        maxmin: true,
+        shadeClose: true,
+        shade: 0.4,
+        title: title,
+        content: url
+    });
+}
+
+/**
+ *
+ * @param title 标题
+ * @param url 请求的url
+ * @param w 弹出层宽度（缺省调默认值）
+ * @param h 弹出层高度（缺省调默认值）
+ */
+function dialog(title, url, w, h) {
+    popup('', title, url, w, h);
+}
+
+/**
+ * @param title 标题
+ * @param url 请求的url
+ */
+function dialog(title, url) {
+    popup('', title, url, null, null);
+}
+
+/**
+ *
+ * @param url
+ * @param data
+ * @param tableId
+ */
+function postAjax(url, data, tableId) {
+    $.post(url, data, function (res) {
+        var msg = res.msg;
+        if (res.status == 200) {
+            window.parent.layui.table.reload(tableId);
+            try{
+                parent.layer.close(parent.layer.getFrameIndex(window.name));
+            }catch (e) {
+                layer.closeAll();
+            }
+            window.top.layer.msg(msg, {icon: 6, offset: 'rb', area: ['120px', '80px'], anim: 2});
+        } else {
+            layer.msg(msg, {icon: 5, offset: 'rb', area: ['120px', '80px'], anim: 2});
+        }
+    })
+}
+
+function postAjaxNoTable(url, data) {
+    var idx = parent.layer.getFrameIndex(window.name);
+    $.post(url, data, function (res) {
+        window.top.layer.msg(res.msg, {icon: 6, offset: 'rb', area: ['120px', '80px'], anim: 2});
+        if (res.status == 200) {
+            parent.layer.close(idx);
+            parent.location.replace(parent.location.href);
+        } else if (res.obj != null) {
+            var obj = res.obj;
+            for (var o in obj) {
+                window.top.layer.tips(obj[o], '[name="' + o + '"]', {tips: 2});
+            }
+        }
+    });
+}
+
+/**
+ * 提交表单
+ * @param formId 表单ID
+ * @param tableId 提交后刷新的表格ID
+ */
+function postForm(formId, tableId) {
+    var form = $('#' + formId), url = form.attr("action"), params = form.serialize();
+    if (url == 'undefined' || url == '') {
+        layer.msg('提交的URL地址错误', {icon: 5, offset: 'rb', area: ['120px', '80px'], anim: 2});
+    }
+    $.post(url, params, function (res) {
+        var msg = res.msg;
+        if (res.status == 200) {
+            window.parent.layui.table.reload(tableId);
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+            window.top.layer.msg(msg, {icon: 6, offset: 'rb', area: ['120px', '80px'], anim: 2});
+        } else {
+            layer.msg(msg, {icon: 5, offset: 'rb', area: ['120px', '80px'], anim: 2});
+        }
+    })
+}
+
+/**
+ * 通用删除
+ * @param url 删除的URL地址
+ * @param data 删除时的请求参数，JSON格式
+ * @param tableId 删除后刷新的tableId
+ */
+function delAjax(url, data, tableId) {
+    $.ajax({
+        url: url,
+        type: "DELETE",
+        data: data,
+        success: function (res) {
+            var msg = res.msg;
+            if (res.status == 200) {
+                layui.table.reload(tableId);
+                try{
+                    layer.close(parent.layer.getFrameIndex(window.name));
+                }catch (e) {
+                   layer.closeAll();
+                }
+                layer.msg(msg, {icon: 6, offset: 'rb', area: ['120px', '80px'], anim: 2});
+            } else {
+                layer.msg(msg, {icon: 5, offset: 'rb', area: ['120px', '80px'], anim: 2});
+            }
+        }
+    });
+}
+
+function delAjaxNoTable(url, data) {
+    $.ajax({
+        url: url,
+        type: "DELETE",
+        data: data,
+        success: function (res) {
+            var msg = res.msg;
+            if (res.status == 200) {
+                layer.msg(msg, {icon: 6, offset: 'rb', area: ['120px', '80px'], anim: 2});
+                location.replace(location.href);
+            } else {
+                layer.msg(msg, {icon: 5, offset: 'rb', area: ['120px', '80px'], anim: 2});
+            }
+        }
+    });
+}
+
+
+/**
+ * 初始化一个下拉树，需要引入/plugin/layuitree/layui/layui.all.js文件
+ * @param layui layui对象
+ * @param eleId 包裹下拉树DIV的ID属性
+ * @param dataJson 初始化树需要的数据
+ * @param inputForId 选中时将元素的ID属性设置到的input
+ * @param inputFormName 选中时将元素的NAME属性设置到的input
+ */
+function initSelectTree(layui, eleId, dataJson, inputForId, inputFormName) {
+    layui.tree({
+        elem: '#' + eleId,
+        nodes: dataJson,
+        click: function (node) {
+            $('#' + inputForId).val(node.id);
+            $('#' + inputFormName).val(node.name);
+            $('#' + eleId).toggle();
+        }
+    })
+}
