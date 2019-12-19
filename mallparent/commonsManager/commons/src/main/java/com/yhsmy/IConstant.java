@@ -45,6 +45,10 @@ public class IConstant {
     public static final String EMAIL = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
     public static final Pattern EMAIL_PATTERN = Pattern.compile (IConstant.EMAIL);
 
+    /** 只能为正数的正则 **/
+    public static final String POSITIVE_NUMBER = "^([1-9][0-9]*(\\.\\d{1,2})?)|(0\\.\\d{1,2})$";
+    public static final Pattern POSITIVE_NUMBER_PATTERN = Pattern.compile (IConstant.POSITIVE_NUMBER);
+
     public static final String MALL_URL = "https://www.yhsmy.com";
 
 

@@ -142,7 +142,7 @@ public class DepartServiceImpl implements DepartServiceI {
                 List<Depart> childList = departMapper.findDepartList (0, "", child.getId ());
                 if(childList != null && childList.size () > 0) {
                     child.setChildren (childList);
-                    for (Depart _child : departList) {
+                    for (Depart _child : childList) {
                         this.combChildRelation (_child);
                     }
                 }

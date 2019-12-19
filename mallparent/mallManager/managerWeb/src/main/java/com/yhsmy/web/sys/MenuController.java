@@ -9,6 +9,7 @@ import com.yhsmy.entity.vo.sys.User;
 import com.yhsmy.enums.MenuTypeEnum;
 import com.yhsmy.service.sys.MenuServiceI;
 import com.yhsmy.util.ShiroUtil;
+import com.yhsmy.utils.FastJsonUtil;
 import com.yhsmy.web.BaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -40,7 +41,7 @@ public class MenuController extends BaseController {
     @RequiresPermissions("menu:list")
     @GetMapping("list")
     public String list (Model model) {
-        model.addAttribute ("menus", JSON.toJSONString (JSONArray.parseArray (JSON.toJSONString (menuServiceI.getMenuList (-1)))));
+        model.addAttribute ("menus", FastJsonUtil.listToJSONArrayString (menuServiceI.getMenuList (-1)));
         return "sys/menu/list";
     }
 
@@ -48,7 +49,7 @@ public class MenuController extends BaseController {
     @RequiresPermissions(value = {"menu:list", "menu:edit"})
     @GetMapping("form")
     public String form (String id, Model model) {
-        String menuJson = JSON.toJSONString (JSONArray.parseArray (JSON.toJSONString (menuServiceI.getMenuList (MenuTypeEnum.OPERA.getKey ()))));
+        String menuJson = FastJsonUtil.listToJSONArrayString (menuServiceI.getMenuList (MenuTypeEnum.OPERA.getKey ()));
         model.addAttribute ("menu", menuServiceI.getMenuById (id));
         model.addAttribute ("menus", menuJson);
         return "sys/menu/form";

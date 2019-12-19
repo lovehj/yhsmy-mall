@@ -31,7 +31,7 @@ public interface UserMapper {
 
     /**
      * @param state 0=删除 1=正常 2 =冻结。参数来源于NormalSateEnum
-     * @param queryBy 0=用户名 1=手机 2=邮箱 3=微信公众号的 openId
+     * @param queryBy 0=用户名 1=手机 2=邮箱 3=微信公众号的 openId 4=角色ID
      * @param queryText
      * @return
      */

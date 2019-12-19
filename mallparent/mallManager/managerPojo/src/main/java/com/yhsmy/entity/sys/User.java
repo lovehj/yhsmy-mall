@@ -26,7 +26,7 @@ public class User implements Serializable {
      * 用户名
      */
     @NotBlank(message = "用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})
-    @Size(min = 0, max = 10, message = "用户名控制在10个字符内！")
+    @Size(min = 2, max = 10, message = "用户名控制在10个字符内！")
     private String username;
 
     /**

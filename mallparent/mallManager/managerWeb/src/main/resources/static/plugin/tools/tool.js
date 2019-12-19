@@ -6,6 +6,7 @@
  * @param h 弹出层高度（缺省调默认值）
  */
 function popup(id, title, url, w, h) {
+    debugger;
     if (id == 'undefined' || id == '' || id == null) {
         id = "timestemp" + (Math.random() + new Date().getTime());
     }
@@ -46,15 +47,49 @@ function popup(id, title, url, w, h) {
  * @param h 弹出层高度（缺省调默认值）
  */
 function dialog(title, url, w, h) {
-    popup('', title, url, w, h);
+    popup(null, title, url, w, h);
 }
+
 
 /**
  * @param title 标题
  * @param url 请求的url
  */
-function dialog(title, url) {
+function dialogNoWOrH(title, url) {
     popup('', title, url, null, null);
+}
+
+/**
+ * 全屏弹窗
+ * @param id 弹窗ID
+ * @param title 弹窗标题
+ * @param url 加载的URL页面地址
+ */
+function fullDialog(id, title, url) {
+    if (id == 'undefined' || id == '' || id == null) {
+        id = "timestemp" + (Math.random() + new Date().getTime());
+    }
+
+    if (title == null || title == '') {
+        title = false;
+    }
+
+    if (url == null || url == '') {
+        url = "/error/404";
+    }
+
+    var index =layer.open({
+        id: id,
+        type: 2,
+        area: ['600px','350px'],
+        fix: false,
+        maxmin: true,
+        shadeClose: false,
+        shade: 0.4,
+        title: title,
+        content: url
+    });
+    layer.full(index);
 }
 
 /**
@@ -67,7 +102,9 @@ function postAjax(url, data, tableId) {
     $.post(url, data, function (res) {
         var msg = res.msg;
         if (res.status == 200) {
-            window.parent.layui.table.reload(tableId);
+            if(tableId != 'undefined' || tableId != '' || tableId != null) {
+                window.parent.layui.table.reload(tableId);
+            }
             try{
                 parent.layer.close(parent.layer.getFrameIndex(window.name));
             }catch (e) {
@@ -182,4 +219,36 @@ function initSelectTree(layui, eleId, dataJson, inputForId, inputFormName) {
             $('#' + eleId).toggle();
         }
     })
+}
+
+/**
+ * 图片上传
+ * @param upload 图片上传的upload对象
+ * @param layer layer对象
+ * @param eleId 图片上传的ID
+ * @param previewId 图片上传成功后的预览ID
+ * @param setImgPathId 设置文件上传成功后的的图片路径
+ * @param setUploadFileId 设置文件上传后的图片ID
+ */
+function singleUpload(upload,layer,eleId, previewId,setImgPathId, setUploadFileId){
+    upload.render({
+        elem:'#'+eleId,
+        url:'/file/upload',
+        before: function (obj) {
+            //预读，不支持ie8
+            obj.preview(function(index, file, result){
+                var userUpload = $('#'+previewId);
+                userUpload.find('img').remove();
+                userUpload.append('<img src="'+ result +'" alt="'+ file.name +'" width="130px" height="130px" class="layui-upload-img layui-circle">');
+            });
+        },
+        done:function (res) {
+            if(res.status == 200) {
+                $('#'+setImgPathId).val(res.obj.filePath);
+                $('#'+setUploadFileId).val(res.obj.id);
+            } else {
+                layer.msg(res.msg,{icon: 5,anim: 6});
+            }
+        }
+    });
 }

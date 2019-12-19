@@ -111,3 +111,14 @@
     margin-left: 20px;
     margin-top: 10px;
 }
+
+.search-input-sm {
+    height: 20px;
+}
+
+.textarea-ext {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 100px;
+    resize: none !important;
+}

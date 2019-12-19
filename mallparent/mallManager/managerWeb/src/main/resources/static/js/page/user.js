@@ -47,7 +47,7 @@ layui.use(['table'],function(){
             });
         },
         userAdd:function () {
-            dialog(title, formUrl, width, height+ 100);
+            dialog(title, formUrl, width, height+ 180);
         }
     }
 
@@ -59,15 +59,15 @@ layui.use(['table'],function(){
     table.on('tool(user)',function (obj) {
         var data = obj.data, event = obj.event, id = data.id,realName = data.realName;
         if(event === 'detail') {
-            dialog('用户查看', "/user/view?id="+id, width, height + 100);
+            dialog('用户查看', "/user/view?id="+id, width, height + 150);
         } else if(event === 'edit') {
-            dialog(title, formUrl+"?id="+id, width, height);
+            dialog(title, formUrl+"?id="+id, width, height + 150);
         } else if(event === 'delete') {
             layer.confirm('您确定删除['+realName+']吗?',function(){
                 delAjax('/user/delete',{id:id},userList);
             });
         } else if(event === 'editPasswd') {
-            dialog('更新密码','/user/editPasswdForm?id='+id,300,260);
+            dialog('更新密码','/user/editPasswdForm?id='+id,500,360);
         } else if(event === 'initPasswd') {
             layer.confirm('您确定将密码初始人为[123456]吗？',function(){
                 postAjax('/user/initPasswd',{id:id,newPasswd:'123456'},userList);

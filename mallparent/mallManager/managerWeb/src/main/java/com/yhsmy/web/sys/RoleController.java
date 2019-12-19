@@ -7,6 +7,7 @@ import com.yhsmy.entity.QueryParams;
 import com.yhsmy.entity.vo.sys.Role;
 import com.yhsmy.service.sys.RoleServiceI;
 import com.yhsmy.util.ShiroUtil;
+import com.yhsmy.utils.FastJsonUtil;
 import com.yhsmy.web.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @auth 李正义
@@ -53,6 +56,25 @@ public class RoleController extends BaseController {
         return roleServiceI.getListData (params);
     }
 
+    @ApiOperation(value = "角色列表数据", notes = "数据以JSON格式返回")
+    @GetMapping("listRole")
+    @ResponseBody
+    public String listRole(QueryParams params) {
+        DataGrid dataGrid = roleServiceI.getListData (params);
+        List<Role> roleList = null;
+        try{
+            if(dataGrid.getData ().size () >0) {
+                roleList = (List<Role>) dataGrid.getData ();
+            }
+        }catch (Exception e) {
+
+        }
+
+        if(roleList == null) {
+            roleList = new ArrayList<> (1);
+        }
+        return FastJsonUtil.listToJSONArrayString (roleList);
+    }
 
     @SysLog(content = "角色编辑页面", type = SysLog.LOG_TYPE_ENUM.UPDATE)
     @RequiresPermissions("role:edit")

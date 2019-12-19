@@ -135,7 +135,12 @@ public class SysLogAspect {
             }
         }
 
-        log.setRequestParams (paramBuilder.toString ());
+        String paramsVal = paramBuilder.toString ();
+        if(paramsVal.length () > 300){
+            paramsVal = paramsVal.substring (0, 299);
+        }
+
+        log.setRequestParams (paramsVal);
         logMapper.addLog (log);
     }
 

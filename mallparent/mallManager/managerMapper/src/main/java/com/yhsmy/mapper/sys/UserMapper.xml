@@ -75,7 +75,7 @@
             and u.state = #{state}
         </if>
         <if test="queryText != null and queryText != ''.toString()">
-            <if test="queryBy lte 0">
+            <if test="queryBy == 0">
                 and username = #{queryText}
             </if>
 
@@ -89,6 +89,10 @@
 
             <if test="queryBy == 3">
                 and openId = #{queryText}
+            </if>
+
+            <if test="queryBy == 4">
+                and u.roleId = #{queryText}
             </if>
         </if>
     </select>

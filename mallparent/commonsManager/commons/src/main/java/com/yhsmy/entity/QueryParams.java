@@ -1,12 +1,14 @@
 package com.yhsmy.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @auth 李正义
  * @date 2019/11/27 18:12
  **/
 @Data
+@NoArgsConstructor
 public class QueryParams {
 
     /**
@@ -28,6 +30,11 @@ public class QueryParams {
     private String page;
     private String limit;
 
+    public QueryParams(int queryBy, String queryText) {
+        this.queryBy = queryBy;
+        this.queryText = queryText;
+    }
+
     public int getPageNo () {
         try {
             return Integer.parseInt (page);
@@ -42,6 +49,10 @@ public class QueryParams {
         } catch (Exception e) {
             return 10;
         }
+    }
+
+    public int getStartRow() {
+        return this.getPageSize () * (this.getPageNo () - 1);
     }
 
 

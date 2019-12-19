@@ -26,6 +26,7 @@
         <yhsmy.version>1.0-SNAPSHOT</yhsmy.version>
         <springboot.version>2.1.9.RELEASE</springboot.version>
         <mybatis.version>2.1.1</mybatis.version>
+        <activiti.mybatis.version>3.5.3</activiti.mybatis.version>
         <druid.version>1.1.21</druid.version>
         <mysql.version>8.0.18</mysql.version>
         <fastjson.version>1.2.62</fastjson.version>
@@ -39,6 +40,9 @@
         <pageHelper.version>1.2.12</pageHelper.version>
         <swagger2.version>2.9.2</swagger2.version>
         <fastdfs.version>1.26.7</fastdfs.version>
+        <activiti.version>5.22.0</activiti.version>
+        <batik.codec.version>1.7</batik.codec.version>
+        <commons.codec.version>1.13</commons.codec.version>
     </properties>
 
     <dependencyManagement>
@@ -165,6 +169,12 @@
                 <version>${commons.lang3.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons.codec.version}</version>
+            </dependency>
+
             <!-- 提供对javaBean的快捷操作 -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -199,6 +209,103 @@
                 <version>${fastdfs.version}</version>
             </dependency>
 
+            <!-- activiti的支持 -->
+            <!--<dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring-boot-starter-basic</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring-boot-starter-actuator</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-rest</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-explorer</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-diagram-rest</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-simple-workflow</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>-->
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-engine</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-modeler</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-diagram-rest</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-codec</artifactId>
+                <version>${batik.codec.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-css</artifactId>
+                <version>${batik.codec.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-svg-dom</artifactId>
+                <version>${batik.codec.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-svggen</artifactId>
+                <version>${batik.codec.version}</version>
+            </dependency>
+
+            <!-- activiti需要依赖mybatis3 -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${activiti.mybatis.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -21,7 +21,12 @@ public enum NormalEnum {
     /**
      * 冻结
      */
-    FREEZE (2, "冻结");
+    FREEZE (2, "冻结"),
+
+    /**
+     * 商品下架
+     */
+    DOWN(3, "下架");
 
     private int key;
 

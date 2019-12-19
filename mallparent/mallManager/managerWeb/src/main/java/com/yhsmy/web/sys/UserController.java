@@ -7,13 +7,12 @@ import com.yhsmy.entity.QueryParams;
 import com.yhsmy.entity.vo.sys.User;
 import com.yhsmy.service.sys.UserServcieI;
 import com.yhsmy.util.ShiroUtil;
+import com.yhsmy.utils.FastJsonUtil;
 import com.yhsmy.web.BaseController;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -23,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +57,23 @@ public class UserController extends BaseController {
         return userServcieI.getListData (state, queryParams);
     }
 
+    @ApiOperation(value = "用户列表数据接口", notes = "返回JSON格式的数据")
+    @GetMapping("listUser")
+    @ResponseBody
+    public String listUser(QueryParams queryParams) {
+        DataGrid dataGrid = userServcieI.getListData (-1, queryParams);
+        List<User> userList = null;
+        try{
+            if(dataGrid.getCount () > 0) {
+                userList = (List<User>) dataGrid.getData ();
+            }
+        }catch (Exception e){ }
+
+        if(userList == null) {
+            userList = new ArrayList<> (1);
+        }
+        return FastJsonUtil.listToJSONArrayString (userList);
+    }
 
     @SysLog(content = "用户编辑页面", type = SysLog.LOG_TYPE_ENUM.UPDATE)
     @RequiresPermissions("user:edit")

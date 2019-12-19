@@ -14,7 +14,7 @@ layui.use(['table'],function () {
         elem:'#roleList',
         url:'/role/listData',
         cols:[[
-            {checkbox:true,fixed:true,width:'100px'},
+            {checkbox:true,fixed:true,width:'6%'},
             {field:'roleName',title:'角色名称',width: '10%', sort: true},
             {field: 'remark', title: '角色描述', width: '25%'},
             {field: 'creator', title: '创建人', width: '8%'},

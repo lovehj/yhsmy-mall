@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  **/
 @Data
 public class FileLib implements Serializable {
+    private static final long serialVersionUID = -7793971175504324439L;
 
     private String id;
 
