@@ -14,8 +14,9 @@
         <div class="layui-logo kit-logo-mobile"></div>
         <div class="layui-hide-xs">
             <ul class="layui-nav layui-layout-left kit-nav">
-                <li class="layui-nav-item">
-                    <a href="javascript:;">点位1</a>
+                <li class="layui-nav-item" style="width: 100px;">
+                    <a href="javascript:;" kit-target data-options="{url:'/message/list',icon:'&#xe658;',title:'消息中心'}">
+                        消息中心<#if messageCount gt 0><span class="layui-badge" id="messageCount">${messageCount}</span></#if></a>
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;" kit-target data-options="{url:'/article/articleList',icon:'&#xe658;',title:'点位2',id:'966'}">点位2</a>
@@ -48,7 +49,7 @@
             <li class="layui-nav-item">
                 <a href="javascript:;">
                     <!-- currentPrincipal参数在常量文件中 -->
-                        <#assign currentUser = Session["currentPrincipal"]>
+                    <#assign currentUser = Session["currentPrincipal"]>
                     <img src="<#if currentUser?? && currentUser.photo??>${currentUser.photo}<#else>/images/default_photo_2.png</#if>" alt="" class="layui-nav-img">${currentUser.realName!}
                 </a>
                 <dl class="layui-nav-child">
@@ -112,4 +113,8 @@
 </body>
 <script src="/plugin/layui/layui.js"></script>
 <script src="/js/tools/main.js"></script>
+<script src="/plugin/tools/tool.js"></script>
+<script type="text/javascript">
+    pullMessage(1, 'messageCount');
+</script>
 </html>

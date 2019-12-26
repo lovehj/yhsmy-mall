@@ -8,6 +8,7 @@ import com.yhsmy.entity.vo.sys.Depart;
 import com.yhsmy.service.sys.DepartServiceI;
 import com.yhsmy.util.ShiroUtil;
 import com.yhsmy.web.BaseController;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
  * @auth 李正义
  * @date 2019/11/29 17:05
  **/
+@Api("部门接口")
 @Controller
 @Scope("request")
 @RequestMapping("/depart")

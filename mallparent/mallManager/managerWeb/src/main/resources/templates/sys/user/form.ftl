@@ -26,7 +26,9 @@
 
                 <div class="layui-input-inline">
                     <div id="userPhotoPreview" style="margin-top: 20px;margin-left: 50px">
-                        <img src="<#if user.photo?? && user.photo?length gt 5>${user.photo!}<#else>/images/default_photo_1.png</#if>" width="130px" height="130px" class="layui-upload-img layui-circle">
+                        <#if user.photo?? && user.photo?length gt 5>
+                            <img src="${user.photo!}" width="120px" height="120px" class="layui-upload-img layui-circle">
+                        </#if>
                     </div>
                 </div>
             </div>

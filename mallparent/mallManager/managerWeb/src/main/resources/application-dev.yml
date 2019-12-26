@@ -3,6 +3,7 @@ logging:
   file: /D:/logs/yhsmy.log
   level:
     com.yhsmy: debug
+    org.activiti.engine.impl.persistence.entity: debug
 #配置数据源
 spring:
   datasource:

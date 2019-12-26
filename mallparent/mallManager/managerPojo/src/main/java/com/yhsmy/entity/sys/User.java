@@ -86,6 +86,11 @@ public class User implements Serializable {
     private String photo;
 
     /**
+     * 用户类型 0=普通用户(默认) 1=管理员
+     */
+    private int ctype;
+
+    /**
      * 记录操作状态 0=删除 1=正常 2=冻结
      */
     private int state;

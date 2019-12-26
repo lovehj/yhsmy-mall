@@ -3,8 +3,10 @@ package com.yhsmy.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * @auth 李正义
@@ -53,6 +55,11 @@ public class DateTimeUtil {
             pattern = FORMMAT_FULL;
         }
         return localDateTime.format (DateTimeFormatter.ofPattern (pattern));
+    }
+
+    public static String formatDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(FORMMAT_FULL);
+        return sdf.format (date);
     }
 
 }

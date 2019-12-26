@@ -49,6 +49,22 @@ public class IConstant {
     public static final String POSITIVE_NUMBER = "^([1-9][0-9]*(\\.\\d{1,2})?)|(0\\.\\d{1,2})$";
     public static final Pattern POSITIVE_NUMBER_PATTERN = Pattern.compile (IConstant.POSITIVE_NUMBER);
 
+    /**
+     * 日期格式化
+     */
+    public static final String LOCALDATE_FORMAT = "yyyy-MM-dd";
+
+    /**
+     * 时间格式化
+     */
+    public static final String LOCALTIME_FORMAT  = "HH:mm:ss";
+
+    /**
+     * 日期时间格式化
+     */
+    public static final String LOCALDATETIME_FORMAT = LOCALDATE_FORMAT+" "+LOCALTIME_FORMAT;
+
+
     public static final String MALL_URL = "https://www.yhsmy.com";
 
 

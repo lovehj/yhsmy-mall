@@ -68,18 +68,18 @@ layui.use(["table","laydate"], function () {
         },
 
         logRefresh:function () {
-            var queryBy = $('[name="queryBy"]').val(1),
-                queryText = $('[name="queryText"]').val(''),
-                queryDate = $('[name="queryDate"]').val(1),
-                startDate = $('#startDate').val(''),
-                endDate = $('#endDate').val('');
+            $('[name="queryBy"]').val(1);
+            $('[name="queryText"]').val('');
+            $('[name="queryDate"]').val(1);
+            $('#startDate').val('');
+            $('#endDate').val('');
             table.reload(logList, {
                 where: {
-                    queryBy: queryBy,
-                    queryText: queryText,
-                    queryDate: queryDate,
-                    startDate: startDate,
-                    endDate: endDate
+                    queryBy: 1,
+                    queryText: '',
+                    queryDate: 1,
+                    startDate: '',
+                    endDate: ''
                 }
             });
         }

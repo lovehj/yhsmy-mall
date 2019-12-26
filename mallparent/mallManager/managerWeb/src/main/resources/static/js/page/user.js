@@ -1,4 +1,4 @@
-var width = 600, height = 500, title = '用户编辑', formUrl = '/user/form', userList = 'userList';
+var width = 600, height = 530, title = '用户编辑', formUrl = '/user/form', userList = 'userList';
 layui.use(['table'],function(){
     var table = layui.table;
     table.render({

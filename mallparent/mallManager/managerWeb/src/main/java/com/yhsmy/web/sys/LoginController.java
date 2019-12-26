@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.yhsmy.IConstant;
 import com.yhsmy.entity.Json;
+import com.yhsmy.entity.QueryParams;
 import com.yhsmy.entity.vo.sys.Menu;
 import com.yhsmy.entity.vo.sys.User;
 import com.yhsmy.enums.MenuTypeEnum;
 import com.yhsmy.service.sys.MenuServiceI;
+import com.yhsmy.service.sys.MessageServiceI;
 import com.yhsmy.service.sys.UserServcieI;
 import com.yhsmy.util.ShiroUtil;
 import com.yhsmy.web.BaseController;
@@ -45,6 +47,9 @@ public class LoginController extends BaseController {
 
     @Autowired
     private MenuServiceI menuServiceI;
+
+    @Autowired
+    private MessageServiceI messageServiceI;
 
     @GetMapping(value = {"/", "login"})
     public String login(){
@@ -101,6 +106,7 @@ public class LoginController extends BaseController {
             List<Menu> menuList = menuServiceI.getMenuListByRoleId (user.getRoleId (), MenuTypeEnum.OPERA.getKey (), true);
             JSONArray arr = JSONArray.parseArray (JSON.toJSONString (menuList));
             session.setAttribute ("menu", arr);
+            session.setAttribute ("messageCount", messageServiceI.getListData (-1, 0, new QueryParams (), user).getCount ());
             viewName = "sys/home";
         }
         return viewName;

@@ -6,7 +6,6 @@
  * @param h 弹出层高度（缺省调默认值）
  */
 function popup(id, title, url, w, h) {
-    debugger;
     if (id == 'undefined' || id == '' || id == null) {
         id = "timestemp" + (Math.random() + new Date().getTime());
     }
@@ -252,3 +251,60 @@ function singleUpload(upload,layer,eleId, previewId,setImgPathId, setUploadFileI
         }
     });
 }
+
+function pullMessage(ctype, eleId) {
+    if(ctype == 1 && (eleId == null || eleId == 'undefined' || eleId == '')) {
+        layer.alert('接收消息总数的ID不能为空!');
+        return false;
+    }
+
+    // 检测浏览器的兼容性
+    var pullUrl = "/message/pushNew?ctype="+ctype;
+    if(window.applicationCache) {
+        var source = new EventSource(pullUrl);
+        source.onmessage = function (event) {
+            var data = event.data;
+            if(data.indexOf("noData") == -1) {
+                if(ctype == 0) {
+                    layer.msg(event.data, {icon: 1});
+                } else if ( ctype == 1) {
+                    $('#'+eleId).text(data);
+                }
+            }
+        }
+        source.onopen = function (event) {
+        }
+    } else {
+        $.get(pullUrl,function (data) {
+            if(data.indexOf("noData") == -1) {
+                if(ctype == 0) {
+                    alert(data);
+                } else if ( ctype == 1) {
+                    if(parseInt(data) <= 0) {
+                        return false;
+                    }
+                    $('#'+eleId).text(data);
+                }
+            }
+        })
+    }
+
+}
+
+/**
+ * 验证金额的正则表达式
+ */
+$('.onlyPriceNum').on('keyup',function () {
+    if(!(/((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/.test($(this).val()))) {
+        $(this).val('0.00');
+    }
+})
+
+/**
+ * 验证整数的正则表达式
+ */
+$('.onlyNum').on('keyup',function () {
+    if(!(/^[0-9]+$/.test($(this).val()))){
+        $(this).val('0');
+    }
+})

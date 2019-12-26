@@ -26,7 +26,22 @@ public enum NormalEnum {
     /**
      * 商品下架
      */
-    DOWN(3, "下架");
+    DOWN(3, "下架"),
+
+    /**
+     * 审批中
+     */
+    AUDITING(10, "审批中"),
+
+    /**
+     * 审批通过
+     */
+    AUDIT_PASS(11, "审批通过"),
+
+    /**
+     * 审批退回
+     */
+    AUDIT_BACK(12, "审批退回");
 
     private int key;
 
