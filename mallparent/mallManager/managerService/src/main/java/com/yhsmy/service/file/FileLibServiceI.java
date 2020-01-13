@@ -18,4 +18,6 @@ public interface FileLibServiceI {
      * @return
      */
     public Json formSubmit (FileLib file, User user);
+
+    public void updateTableInfo(String id, String tableId, String tableName);
 }

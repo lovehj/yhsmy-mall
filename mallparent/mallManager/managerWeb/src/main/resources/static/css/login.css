@@ -15,7 +15,7 @@ body {
     margin-right: 110px;
     background: #fff;
     z-index: 4;
-    width: 360px;
+    width: 400px;
     overflow: visible;
     position: relative;
 }
@@ -31,4 +31,13 @@ body {
 .copyright-warp {
     position: fixed;
     bottom: 0;
+}
+.verifyCode {
+    vertical-align:middle;
+    width:80px;
+    display: inline;
+}
+
+img {
+    vertical-align: middle;
 }

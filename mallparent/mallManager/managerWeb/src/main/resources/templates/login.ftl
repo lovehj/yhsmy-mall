@@ -21,6 +21,14 @@
                 </div>
             </div>
 
+            <div class="layui-form-item">
+                <label class="layui-form-label">验证码</label>
+                <div class="layui-input-block">
+                    <input name="verifyCode" lay-verify="required" placeholder="验证码" autocomplete="off" class="layui-input verifyCode">
+                    <img src="/verifyCode" id="verifyCodeImg" onclick="changeVerifyCode()" alt="看不清?换一张">
+                </div>
+            </div>
+
             <div class="layui-form-item ">
                 <label class="layui-form-label">记住密码</label>
                 <div class="layui-input-block">

@@ -5,6 +5,7 @@ import com.yhsmy.entity.DataGrid;
 import com.yhsmy.entity.Json;
 import com.yhsmy.entity.QueryParams;
 import com.yhsmy.entity.vo.sys.User;
+import com.yhsmy.service.mail.MailSenderServiceI;
 import com.yhsmy.service.sys.UserServcieI;
 import com.yhsmy.util.ShiroUtil;
 import com.yhsmy.utils.FastJsonUtil;
@@ -180,6 +181,4 @@ public class UserController extends BaseController {
         }
         return userServcieI.updateStatus (id, ShiroUtil.getUser ());
     }
-
-
 }

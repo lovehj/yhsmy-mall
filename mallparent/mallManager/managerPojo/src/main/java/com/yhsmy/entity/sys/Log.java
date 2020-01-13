@@ -30,12 +30,22 @@ public class Log implements Serializable {
     /**
      * 操作的IP
      */
-    private String formIp;
+    private String fromIp;
+
+    /**
+     * 操作的国家·省份/城市
+     */
+    private String fromArea;
+
+    /**
+     * 经度|纬度
+     */
+    private String fromLonLat;
 
     /**
      * 设备来源
      */
-    private String formDevice;
+    private String fromDevice;
 
     /**
      * 浏览器

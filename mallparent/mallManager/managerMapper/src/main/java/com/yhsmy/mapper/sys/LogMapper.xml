@@ -4,7 +4,7 @@
 
 <mapper namespace="com.yhsmy.mapper.sys.LogMapper">
     <sql id="logFields">
-       logId,operator,operaType,formIp,formDevice,browser,browserVersion,remark,requestMethod,requestParams,exceptionMessage,state,createTime
+       logId,operator,operaType,fromIp,fromArea,fromLonLat,fromDevice,browser,browserVersion,remark,requestMethod,requestParams,exceptionMessage,state,createTime
     </sql>
 
     <sql id="logTable">
@@ -15,7 +15,7 @@
         insert into <include refid="logTable" />
         (<include refid="logFields"/>)
         values
-        (#{logId},#{operator},#{operaType},#{formIp},#{formDevice},#{browser},#{browserVersion},#{remark},#{requestMethod},#{requestParams},#{exceptionMessage},#{state},#{createTime})
+        (#{logId},#{operator},#{operaType},#{fromIp},#{fromArea},#{fromLonLat},#{fromDevice},#{browser},#{browserVersion},#{remark},#{requestMethod},#{requestParams},#{exceptionMessage},#{state},#{createTime})
     </insert>
 
     <select id="findLogList" resultType="Log">
@@ -33,7 +33,7 @@
             </if>
 
             <if test="queryBy == 3">
-                and INSTR(formDevice, #{queryText}) > 0
+                and INSTR(fromDevice, #{queryText}) > 0
             </if>
         </if>
 

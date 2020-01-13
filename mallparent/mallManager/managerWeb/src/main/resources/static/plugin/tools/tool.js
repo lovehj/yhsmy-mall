@@ -103,6 +103,7 @@ function postAjax(url, data, tableId) {
         if (res.status == 200) {
             if(tableId != 'undefined' || tableId != '' || tableId != null) {
                 window.parent.layui.table.reload(tableId);
+                layui.table.reload(tableId);
             }
             try{
                 parent.layer.close(parent.layer.getFrameIndex(window.name));
@@ -228,8 +229,9 @@ function initSelectTree(layui, eleId, dataJson, inputForId, inputFormName) {
  * @param previewId 图片上传成功后的预览ID
  * @param setImgPathId 设置文件上传成功后的的图片路径
  * @param setUploadFileId 设置文件上传后的图片ID
+ * @param noCircle 图片不显示为一个圆形
  */
-function singleUpload(upload,layer,eleId, previewId,setImgPathId, setUploadFileId){
+function singleUpload(upload,layer,eleId, previewId,setImgPathId, setUploadFileId, noCircle){
     upload.render({
         elem:'#'+eleId,
         url:'/file/upload',
@@ -238,7 +240,12 @@ function singleUpload(upload,layer,eleId, previewId,setImgPathId, setUploadFileI
             obj.preview(function(index, file, result){
                 var userUpload = $('#'+previewId);
                 userUpload.find('img').remove();
-                userUpload.append('<img src="'+ result +'" alt="'+ file.name +'" width="130px" height="130px" class="layui-upload-img layui-circle">');
+                if(typeof (noCircle) != "undefined" || noCircle) {
+                    userUpload.append('<img src="'+ result +'" alt="'+ file.name +'" width="130px" height="130px" class="layui-upload-img">');
+                } else {
+                    userUpload.append('<img src="'+ result +'" alt="'+ file.name +'" width="130px" height="130px" class="layui-upload-img layui-circle">');
+                }
+
             });
         },
         done:function (res) {
@@ -251,6 +258,7 @@ function singleUpload(upload,layer,eleId, previewId,setImgPathId, setUploadFileI
         }
     });
 }
+
 
 function pullMessage(ctype, eleId) {
     if(ctype == 1 && (eleId == null || eleId == 'undefined' || eleId == '')) {

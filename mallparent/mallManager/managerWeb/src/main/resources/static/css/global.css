@@ -123,6 +123,15 @@
     resize: none !important;
 }
 
+.w400 {
+    width: 400px !important;
+}
+.w500 {
+    width: 500px !important;
+}
+.w600 {
+    width: 600px !important;
+}
 .w800 {
     width: 800px !important;
 }

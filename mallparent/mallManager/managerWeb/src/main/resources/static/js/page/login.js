@@ -23,6 +23,7 @@ $(function(){
                     layer.alert(res.msg, {icon: 5,anim:6,offset: 't'});
                     $('[name="username"]').focus();
                     $('[name="password"]').val('');
+                    changeVerifyCode();
                 }
             });
             return false;
@@ -32,4 +33,8 @@ $(function(){
 
 if(window != top) {
     top.location.href = location.href;
+}
+
+function changeVerifyCode() {
+    $('#verifyCodeImg').attr("src", '/verifyCode?date='+new Date().getTime());
 }

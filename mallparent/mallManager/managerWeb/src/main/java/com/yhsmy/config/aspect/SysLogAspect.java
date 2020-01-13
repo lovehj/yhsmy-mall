@@ -110,8 +110,13 @@ public class SysLogAspect {
             HttpServletRequest request =
                     ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes ()).getRequest ();
 
-            log.setFormIp (RequestUtil.getIp (request));
-            log.setFormDevice (RequestUtil.getPlatform (request));
+            String ip = RequestUtil.getIp (request);
+            log.setFromIp (ip);
+            log.setFromDevice (RequestUtil.getPlatform (request));
+
+            String[] cityInfo = RequestUtil.getCityInfo (ip);
+            log.setFromArea (cityInfo[0]);
+            log.setFromLonLat (cityInfo[1]);
             String[] browsers = RequestUtil.getBroswers (request);
             log.setBrowser (browsers[0]);
             log.setBrowserVersion (browsers[1]);

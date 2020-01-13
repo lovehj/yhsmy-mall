@@ -43,6 +43,7 @@
         <activiti.version>5.22.0</activiti.version>
         <batik.codec.version>1.7</batik.codec.version>
         <commons.codec.version>1.13</commons.codec.version>
+        <geoip.version>2.13.0</geoip.version>
     </properties>
 
     <dependencyManagement>
@@ -85,6 +86,20 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${springboot.version}</version>
+            </dependency>
+
+            <!-- rabbitmq -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-amqp</artifactId>
+                <version>${springboot.version}</version>
+            </dependency>
+
+            <!-- 对邮件的支持 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-mail</artifactId>
                 <version>${springboot.version}</version>
             </dependency>
 
@@ -210,48 +225,6 @@
             </dependency>
 
             <!-- activiti的支持 -->
-            <!--<dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-spring-boot-starter-basic</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-spring-boot-starter-actuator</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-rest</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-explorer</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-diagram-rest</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-simple-workflow</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-spring</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>-->
-
             <dependency>
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-engine</artifactId>
@@ -305,6 +278,13 @@
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
                 <version>${activiti.mybatis.version}</version>
+            </dependency>
+
+            <!-- 根据IP地址获取城市信息 -->
+            <dependency>
+                <groupId>com.maxmind.geoip2</groupId>
+                <artifactId>geoip2</artifactId>
+                <version>${geoip.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

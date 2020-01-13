@@ -5,6 +5,7 @@ import com.yhsmy.entity.vo.file.FileLib;
 import com.yhsmy.entity.vo.sys.UpdateMap;
 import com.yhsmy.entity.vo.sys.User;
 import com.yhsmy.enums.NormalEnum;
+import com.yhsmy.exception.ServiceException;
 import com.yhsmy.mapper.file.FileLibMapper;
 import com.yhsmy.mapper.sys.MybatisMapper;
 import com.yhsmy.service.file.FileLibServiceI;
@@ -68,4 +69,24 @@ public class FileLibServiceImpl implements FileLibServiceI {
         }
         return Json.ok (fileLib);
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updateTableInfo (String id, String tableId, String tableName) {
+        // 更新附件表信息
+        if(StringUtils.isNotBlank (id)) {
+            FileLib fileLib = fileLibMapper.findFileLibById (id);
+            if (fileLib != null) {
+                UpdateMap fileUpdateMap = new UpdateMap ("smy_file_lib");
+                fileUpdateMap.addField ("tableId", tableId);
+                fileUpdateMap.addField ("tableName", tableName);
+                fileUpdateMap.addWhere ("id", fileLib.getId ());
+                if (this.mybatisMapper.update (fileUpdateMap) <= 0) {
+                    throw new ServiceException ("更新附件失败!");
+                }
+            }
+        }
+    }
+
+
 }

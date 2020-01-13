@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -169,6 +170,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put ("/druid/**", "anon");
         filterChainDefinitionMap.put ("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put ("/login", "anon");
+        filterChainDefinitionMap.put ("/verifyCode", "anon");
 
         // 需要拦截的资源
         filterChainDefinitionMap.put ("logout", "logout");

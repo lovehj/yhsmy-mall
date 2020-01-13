@@ -23,6 +23,7 @@ spring:
     request-context-attribute: request
     suffix: .ftl
 
+
 #配置mybatis
 mybatis:
   type-aliases-package: com.yhsmy.entity.vo.*

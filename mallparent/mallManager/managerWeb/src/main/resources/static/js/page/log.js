@@ -24,8 +24,10 @@ layui.use(["table","laydate"], function () {
         cols:[[
             {checkbox: true, fixed: true, width: '4%'},
             {field: 'operaType', title: '操作类型', width: '7%'},
-            {field: 'formIp', title: '操作IP', width: '9%'},
-            {field: 'formDevice', title: '操作设备', width: '6%'},
+            {field: 'fromIp', title: '操作IP', width: '8%'},
+            {field: 'fromArea', title: '地区来源', width: '7%'},
+            {field: 'fromLonLat', title: '地区经纬度', width: '7%'},
+            {field: 'fromDevice', title: '操作设备', width: '6%'},
             {field: 'browser', title: '浏览器', width: '7%'},
             {field: 'browserVersion', title: '浏览器版本', width: '10%'},
             {field: 'remark', title: '操作备注', width: '10%'},

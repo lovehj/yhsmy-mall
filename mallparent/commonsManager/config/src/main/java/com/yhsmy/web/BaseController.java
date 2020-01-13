@@ -37,17 +37,6 @@ public abstract class BaseController {
         return "redirect:/error/403?message=" + message;
     }
 
-//    protected Json catchJsonResult(Json jsonResult) {
-//        try{
-//            return jsonResult;
-//        }catch(Exception e) {
-//            if(StringUtils.isNotEmpty (e.getMessage ())) {
-//                return Json.fail (e.getMessage ());
-//            }
-//            return Json.fail ();
-//        }
-//    }
-
     protected Json validResult(BindingResult result) {
         if(result.hasErrors ()) {
             StringBuilder builder = new StringBuilder ();

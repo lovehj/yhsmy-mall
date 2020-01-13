@@ -2,6 +2,7 @@ package com.yhsmy.web.file;
 
 import com.yhsmy.annotation.SysLog;
 import com.yhsmy.entity.Json;
+import com.yhsmy.entity.LayuiEdit;
 import com.yhsmy.entity.vo.file.FileLib;
 import com.yhsmy.service.file.FileLibServiceI;
 import com.yhsmy.util.FastdfsClientUtil;
@@ -50,4 +51,27 @@ public class FileController extends BaseController {
         }
     }
 
+    @SysLog(content = "layuiEdit单个文件上传", type = SysLog.LOG_TYPE_ENUM.UPDATE)
+    @ApiImplicitParam(name = "file", value = "文件对象")
+    @PostMapping(value = "editorUpload", headers = "content-type=multipart/form-data")
+    @ResponseBody
+    public LayuiEdit editorUpload (@RequestParam("file") MultipartFile file) {
+        if (file == null) {
+            return LayuiEdit.fail ();
+        }
+
+        try {
+            Json json = this.upload (file);
+            if (json.getStatus () != Json.FAIL_CODE || json.getObj () == null) {
+                return LayuiEdit.fail ();
+            }
+
+            FileLib saveFileLib = (FileLib) json.getObj ();
+            return LayuiEdit.ok (saveFileLib.getUrlPrefix ()
+                    + "/" + saveFileLib.getFilePath (), saveFileLib.getFileName ());
+        } catch (Exception e) {
+            return LayuiEdit.fail ();
+        }
+
+    }
 }
