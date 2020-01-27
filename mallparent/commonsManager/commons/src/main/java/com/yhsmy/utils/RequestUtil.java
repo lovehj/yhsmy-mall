@@ -1,7 +1,10 @@
 package com.yhsmy.utils;
 
 import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.AnonymousIpResponse;
+import com.maxmind.geoip2.model.AsnResponse;
 import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.model.CountryResponse;
 import com.maxmind.geoip2.record.City;
 import com.maxmind.geoip2.record.Country;
 import com.maxmind.geoip2.record.Location;
@@ -12,6 +15,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -96,31 +102,30 @@ public class RequestUtil {
      */
     public static String[] getCityInfo (String ip) {
         try {
-            Resource resource = new ClassPathResource ("geolite/GeoLite2-ASN.mmdb");
-            DatabaseReader dbReader = new DatabaseReader.Builder (resource.getFile ()).build ();
+            Resource resource = new ClassPathResource ("geolite/GeoLite2-City.mmdb");
+            DatabaseReader dbReader = new DatabaseReader.Builder (resource.getInputStream ()).build ();
             InetAddress inetAddress = InetAddress.getByName (ip);
             CityResponse response = dbReader.city (inetAddress);
             Country country = response.getCountry (); // 获取国家信息
             String countryName = country.getNames ().get ("zh-CN");
-            if(StringUtils.isEmpty (countryName)) {
+            if (StringUtils.isEmpty (countryName)) {
                 countryName = "中国";
             }
             Subdivision subdivision = response.getMostSpecificSubdivision (); // 获取省份信息
             String subName = subdivision.getNames ().get ("zh-CN");
-            if(StringUtils.isEmpty (subName)) {
+            if (StringUtils.isEmpty (subName)) {
                 subName = "四川省";
             }
             City city = response.getCity (); // 获取城市
             String cityName = city.getNames ().get ("zh-CN");
-            if(StringUtils.isEmpty (cityName)) {
+            if (StringUtils.isEmpty (cityName)) {
                 cityName = "成都市";
             }
             Location location = response.getLocation (); // 获取经纬度
             String latitude = String.valueOf (location.getLatitude ()); // 纬度
             String longitude = String.valueOf (location.getLongitude ()); // 经度
             return new String[]{countryName + "·" + subName + "/" + cityName, longitude + "|" + latitude};
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
         return new String[]{"中国·四川省/成都市", "104.05|30.68"};
     }
 
