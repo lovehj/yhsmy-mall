@@ -166,7 +166,7 @@ public class LoginController extends BaseController {
             List<Menu> menuList = menuServiceI.getMenuListByRoleId (user.getRoleId (), MenuTypeEnum.OPERA.getKey (), true);
             JSONArray arr = JSONArray.parseArray (JSON.toJSONString (menuList));
             session.setAttribute ("menu", arr);
-            session.setAttribute ("messageCount", messageServiceI.getListData (-1, 1, new QueryParams (), user).getCount ());
+            session.setAttribute ("messageCount", messageServiceI.getListData (-1, 0, new QueryParams (), user).getCount ());
             viewName = "sys/home";
         }
         return viewName;

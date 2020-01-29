@@ -5,6 +5,7 @@ import com.yhsmy.entity.Json;
 import com.yhsmy.entity.QueryParams;
 import com.yhsmy.entity.vo.sys.User;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,4 +75,9 @@ public interface UserServcieI {
      */
     public Json updateStatus (String id, User operatorUser);
 
+    /**
+     * @param ids 用户ID集合
+     * @return
+     */
+    public List<List<Object>> getExportData (String ids, User user);
 }

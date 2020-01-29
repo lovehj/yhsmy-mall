@@ -94,7 +94,21 @@
             <if test="queryBy == 4">
                 and u.roleId = #{queryText}
             </if>
+
         </if>
+    </select>
+
+    <select id="findUserListByIds" resultType="User">
+        select
+          <include refid="userAliasFields" />,d.name as departName,r.roleName as roleName
+        from <include refid="userTable" /> as u
+        left join <include refid="departTable"/> d on d.id = u.departId
+        left join <include refid="roleTable"/> r on r.roleId = u.roleId
+        where 1=1
+        and u.id in
+        <foreach collection="idList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </select>
 
 

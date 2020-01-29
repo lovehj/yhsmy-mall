@@ -48,6 +48,18 @@ layui.use(['table'],function(){
         },
         userAdd:function () {
             dialog(title, formUrl, width, height+ 180);
+        },
+        exportExcel: function () {
+            var checkkStatus = table.checkStatus(userList), datas = checkkStatus.data;
+            if(datas.length <= 0) {
+                layer.alert("请勾选需要导出的数据!");
+                return false;
+            }
+            var ids = [];
+            datas.forEach(function (item, index) {
+                ids.push(item.id);
+            })
+            window.location.href = "/user/exportExcel?ids="+ids.join(",")+"&"+Math.random();
         }
     }
 

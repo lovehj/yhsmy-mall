@@ -52,10 +52,12 @@
                     <#assign currentUser = Session["currentPrincipal"]>
                     <img src="<#if currentUser?? && currentUser.photo??>${currentUser.photo}<#else>/images/default_photo_2.png</#if>" alt="" class="layui-nav-img">${currentUser.realName!}
                 </a>
-                <dl class="layui-nav-child">
-                    <dd><a href="javascript:;" kit-target data-options="{url:'/person',icon:'&#xe658;',title:'基本资料',id:'966'}"><span>基本资料</span></a></dd>
-                    <dd><a href="javascript:;">安全设置</a></dd>
-                </dl>
+                <#if currentUser?? && currentUser.id??>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" kit-target data-options="{url:'/user/view?id=${currentUser.id}',icon:'&#xe658;',title:'基本资料',id:'688'}"><span>基本资料</span></a></dd>
+                        <dd><a href="javascript:;" kit-target data-options="{url:'/user/editPasswdForm?id=${currentUser.id}',icon:'&#xe658;',title:'安全设置',id:'689'}"><span>安全设置</span></a></dd>
+                    </dl>
+                </#if>
             </li>
             <li class="layui-nav-item">
                 <a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a>

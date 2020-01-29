@@ -26,7 +26,6 @@ import com.yhsmy.utils.FastJsonUtil;
 import com.yhsmy.utils.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Update;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -35,9 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @auth 李正义
@@ -84,8 +81,8 @@ public class UserServiceImpl implements UserServcieI {
     @Cacheable(value = CACHE_KEY, condition = "#ctype>-1 and #queryText != 'null'")
     public User getUserByLogin (int ctype, String queryText) {
         User user = userMapper.findUserByLogin (ctype, queryText);
-        if(user != null && StringUtils.isNotBlank (user.getPhoto ().trim ())) {
-            user.setPhoto (fastdfsClientUtil.getFdfsWebUrlPrefix ()+"/"+user.getPhoto ());
+        if (user != null && StringUtils.isNotBlank (user.getPhoto ().trim ())) {
+            user.setPhoto (fastdfsClientUtil.getFdfsWebUrlPrefix () + "/" + user.getPhoto ());
         }
         return user;
     }
@@ -113,8 +110,8 @@ public class UserServiceImpl implements UserServcieI {
                 }
             }
 
-            if(otherInfo && StringUtils.isNotBlank (user.getPhoto ().trim ())) {
-                user.setPhoto (fastdfsClientUtil.getFdfsWebUrlPrefix ()+"/"+user.getPhoto ());
+            if (otherInfo && StringUtils.isNotBlank (user.getPhoto ().trim ())) {
+                user.setPhoto (fastdfsClientUtil.getFdfsWebUrlPrefix () + "/" + user.getPhoto ());
             }
         } else {
             user = new User ();
@@ -132,7 +129,7 @@ public class UserServiceImpl implements UserServcieI {
 
         // 准备部门数据
         result.put ("user", user);
-        if(otherInfo) {
+        if (otherInfo) {
             result.put ("departDataList", FastJsonUtil.listToJSONArrayString (departServiceI.getDepartList (true)));
             result.put ("roleDataList", roleMapper.findRoleList (-1, ""));
         }
@@ -156,22 +153,22 @@ public class UserServiceImpl implements UserServcieI {
         // 参数验证
         boolean isEdit = StringUtils.isNotBlank (editUser.getId ());
         User _user = null;
-        if(StringUtils.isEmpty (editUser.getId ())) {
+        if (StringUtils.isEmpty (editUser.getId ())) {
             // 验证用户名
             _user = userMapper.findUserByLogin (0, editUser.getUsername ());
-            if(_user != null) {
+            if (_user != null) {
                 Json.fail ("用户名已存在!");
             }
         }
 
         // 验证手机号是否存在
         _user = userMapper.findUserByLogin (1, editUser.getMobile ());
-        if(_user != null && ((isEdit && !_user.getId ().equals (editUser.getId ()))||!isEdit)) {
+        if (_user != null && ((isEdit && !_user.getId ().equals (editUser.getId ())) || !isEdit)) {
             return Json.fail ("手机号已存在!");
         }
 
-        _user = userMapper.findUserByLogin (2, editUser.getEmail ()) ;
-        if(_user != null && ((isEdit && !_user.getId ().equals (editUser.getId ()))||!isEdit)) {
+        _user = userMapper.findUserByLogin (2, editUser.getEmail ());
+        if (_user != null && ((isEdit && !_user.getId ().equals (editUser.getId ())) || !isEdit)) {
             return Json.fail ("邮箱已存在!");
         }
 
@@ -243,10 +240,10 @@ public class UserServiceImpl implements UserServcieI {
             return Json.fail ("用户未找到!");
         }
 
-        if(StringUtils.isNotBlank (originalPasswd)) {
+        if (StringUtils.isNotBlank (originalPasswd)) {
             originalPasswd = new SimpleHash (IConstant.SHIRO_SCCRITY, user.getUsername (),
                     originalPasswd, IConstant.SHIRO_ITEAROTR).toString ();
-            if(!user.getPassword ().equals (originalPasswd.trim ())) {
+            if (!user.getPassword ().equals (originalPasswd.trim ())) {
                 return Json.fail ("原始密码不相等！");
             }
         }
@@ -285,5 +282,26 @@ public class UserServiceImpl implements UserServcieI {
             return Json.fail ();
         }
         return Json.ok ();
+    }
+
+    @Override
+    public List<List<Object>> getExportData (String ids, User user) {
+        List<User> users = userMapper.findUserListByIds (Arrays.asList (StringUtils.split (ids, ",")));
+        if (users.isEmpty () || users.size () <= 0) {
+            return null;
+        }
+        List<List<Object>> dataList = new ArrayList<> (users.size ());
+        for (User u : users) {
+            List<Object> datas = new ArrayList<> (7);
+            datas.add (u.getUsername ());
+            datas.add (u.getRealName ());
+            datas.add (u.getMobile ());
+            datas.add (u.getEmail ());
+            datas.add (u.getDepartName ());
+            datas.add (u.getRoleName ());
+            datas.add (u.getStateStr ());
+            dataList.add (datas);
+        }
+        return dataList;
     }
 }

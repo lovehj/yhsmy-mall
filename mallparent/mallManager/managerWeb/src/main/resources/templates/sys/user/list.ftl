@@ -38,6 +38,10 @@
                     </a>
                 </@shiro.hasPermission>
 
+                <a class="layui-btn layui-btn-warm activeBtn" data-type="exportExcel">
+                    <i class="layui-icon">&#xe67d;</i>导出Excel
+                </a>
+
                 <a class="layui-btn layui-btn-sm icon-position-button activeBtn" id="refresh" style="float: right;" data-type="reload">
                     <i class="layui-icon">ဂ</i>
                 </a>
@@ -55,8 +59,8 @@
     <!-- 数据表格区域结束 -->
     <script type="text/html" id="userToolBar">
         <@shiro.hasPermission name="user:edit">
-            <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="detail">查看</a>
-            <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">查看</a>
+            <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="detail">编辑</a>
         </@shiro.hasPermission>
 
         <@shiro.hasPermission name="user:delete">

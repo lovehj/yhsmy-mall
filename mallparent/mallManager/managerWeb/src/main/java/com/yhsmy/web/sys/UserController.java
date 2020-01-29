@@ -5,14 +5,16 @@ import com.yhsmy.entity.DataGrid;
 import com.yhsmy.entity.Json;
 import com.yhsmy.entity.QueryParams;
 import com.yhsmy.entity.vo.sys.User;
-import com.yhsmy.service.mail.MailSenderServiceI;
 import com.yhsmy.service.sys.UserServcieI;
 import com.yhsmy.util.ShiroUtil;
+import com.yhsmy.utils.DateTimeUtil;
 import com.yhsmy.utils.FastJsonUtil;
+import com.yhsmy.utils.poi.ExcelUtils;
 import com.yhsmy.web.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +24,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,16 +66,17 @@ public class UserController extends BaseController {
     @ApiOperation(value = "用户列表数据接口", notes = "返回JSON格式的数据")
     @GetMapping("listUser")
     @ResponseBody
-    public String listUser(QueryParams queryParams) {
+    public String listUser (QueryParams queryParams) {
         DataGrid dataGrid = userServcieI.getListData (-1, queryParams);
         List<User> userList = null;
-        try{
-            if(dataGrid.getCount () > 0) {
+        try {
+            if (dataGrid.getCount () > 0) {
                 userList = (List<User>) dataGrid.getData ();
             }
-        }catch (Exception e){ }
+        } catch (Exception e) {
+        }
 
-        if(userList == null) {
+        if (userList == null) {
             userList = new ArrayList<> (1);
         }
         return FastJsonUtil.listToJSONArrayString (userList);
@@ -85,7 +91,6 @@ public class UserController extends BaseController {
         model.addAttribute ("userView", StringUtils.isNotBlank (id) && uri.indexOf ("view") > -1 ? true : false);
         return "sys/user/form";
     }
-
 
     @SysLog(content = "用户编辑", type = SysLog.LOG_TYPE_ENUM.UPDATE)
     @ApiOperation(value = "用户表单提交")
@@ -154,7 +159,7 @@ public class UserController extends BaseController {
             return Json.fail (valid);
         }
 
-        return userServcieI.updatePasswd (id, originalPasswd,newPasswd, ShiroUtil.getUser ());
+        return userServcieI.updatePasswd (id, originalPasswd, newPasswd, ShiroUtil.getUser ());
     }
 
 
@@ -167,7 +172,7 @@ public class UserController extends BaseController {
         if (StringUtils.isEmpty (id)) {
             return Json.fail ();
         }
-        return userServcieI.updatePasswd (id,"", newPasswd, ShiroUtil.getUser ());
+        return userServcieI.updatePasswd (id, "", newPasswd, ShiroUtil.getUser ());
     }
 
     @SysLog(content = "启用/禁用用户", type = SysLog.LOG_TYPE_ENUM.UPDATE)
@@ -180,5 +185,27 @@ public class UserController extends BaseController {
             return Json.fail ();
         }
         return userServcieI.updateStatus (id, ShiroUtil.getUser ());
+    }
+
+    @SysLog(content = "用户数据导出", type = SysLog.LOG_TYPE_ENUM.SELECT)
+    @ApiOperation(value = "用户数据导出")
+    @GetMapping("exportExcel")
+    public void exportExcel (String ids, HttpServletResponse response) throws Exception {
+        if (StringUtils.isNotEmpty (ids)) {
+            List<List<Object>> dataList = userServcieI.getExportData (StringUtils.trim (ids), ShiroUtil.getUser ());
+            if (dataList == null) {
+                return;
+            }
+            response.setContentType ("application/octet-stream; charset=utf-8");
+            String title = "用户数据导出", fileName = new String (title.getBytes ("gb2312"), "ISO-8859-1") + DateTimeUtil.localDateTimeToStr (LocalDateTime.now (), "yyyyMMddHHmmss") + ".xls";
+            response.setHeader ("Content-Disposition", "attachment;filename=" + fileName);
+            String[] headers = {"用户名", "真实姓名", "手机号", "邮箱", "所在部门", "拥有角色", "状态"};
+            Workbook wb = ExcelUtils.exprotExcel (headers, dataList, title);
+            OutputStream out = response.getOutputStream ();
+            wb.write (out);
+            out.flush ();
+            out.close ();
+            wb.close ();
+        }
     }
 }
