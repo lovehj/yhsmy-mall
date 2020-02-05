@@ -117,6 +117,6 @@
 <script src="/js/tools/main.js"></script>
 <script src="/plugin/tools/tool.js"></script>
 <script type="text/javascript">
-    pullMessage(1, 'messageCount');
+    //pullMessage(1, 'messageCount');
 </script>
 </html>

@@ -79,7 +79,7 @@ public class MessageController extends BaseController {
             }
         } else {
             // 推送未消息总数给浏览器
-            long count = messageServiceI.getListData (-1, -1, new QueryParams (), ShiroUtil.getUser ()).getCount ();
+            long count = messageServiceI.getListData (-1, 0, new QueryParams (), ShiroUtil.getUser ()).getCount ();
             if(count > 0) {
                 return "data:" + count + "\n\n";
             }

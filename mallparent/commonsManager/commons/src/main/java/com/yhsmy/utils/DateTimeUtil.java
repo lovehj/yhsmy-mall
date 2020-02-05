@@ -62,4 +62,24 @@ public class DateTimeUtil {
         return sdf.format (date);
     }
 
+    public static String durationForDays(long millis) {
+        if(millis <= 0) {
+            return "0天0时0分0秒";
+        }
+        long days =  millis / DateUtils.MILLIS_PER_DAY;
+        long hours = millis / DateUtils.MILLIS_PER_HOUR;
+        if(hours > 24) {
+            hours = millis % 24;
+        }
+        long minute = millis / DateUtils.MILLIS_PER_MINUTE;
+        if(minute > 60) {
+            minute = minute % 60;
+        }
+        long second = millis / DateUtils.MILLIS_PER_SECOND;
+        if(second > 60) {
+            second = second % 60;
+        }
+        return days+"天"+hours+"时"+minute+"分"+second+"秒";
+    }
+
 }

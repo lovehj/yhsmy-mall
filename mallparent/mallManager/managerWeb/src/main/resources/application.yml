@@ -4,7 +4,7 @@ server:
 # 激活环境
 spring:
   profiles:
-    active: dev
+    active: prod #active: dev
   servlet:
     multipart:
       max-file-size: 5MB #单个文件的最大值
@@ -22,7 +22,6 @@ spring:
     expose-session-attributes: false
     request-context-attribute: request
     suffix: .ftl
-
 
 #配置mybatis
 mybatis:
