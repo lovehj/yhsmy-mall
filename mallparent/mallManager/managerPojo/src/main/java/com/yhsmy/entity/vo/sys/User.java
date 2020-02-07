@@ -22,15 +22,27 @@ public class User extends com.yhsmy.entity.sys.User {
 
     private String fileLibId;
 
-    public boolean isRememberMe() {
-        if(StringUtils.isEmpty (this.getRememberMe ()) ||
+    public boolean isRememberMe () {
+        if (StringUtils.isEmpty (this.getRememberMe ()) ||
                 !"on".equalsIgnoreCase (this.getRememberMe ())) {
             return false;
         }
         return true;
     }
 
-    public String getStateStr() {
+    /**
+     * 根据ctype字段，判断用户是否为超级用户
+     *
+     * @return
+     */
+    public boolean isAdmin () {
+        if (super.getCtype () == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getStateStr () {
         return NormalEnum.getValueByKey (this.getState ());
     }
 }

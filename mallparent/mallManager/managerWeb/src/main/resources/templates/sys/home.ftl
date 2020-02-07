@@ -18,14 +18,16 @@
                     <a href="javascript:;" kit-target data-options="{url:'/message/list',icon:'&#xe658;',title:'消息中心'}">
                         消息中心<#if messageCount gt 0><span class="layui-badge" id="messageCount">${messageCount}</span></#if></a>
                 </li>
+                <#--
                 <li class="layui-nav-item">
                     <a href="javascript:;" kit-target data-options="{url:'/article/articleList',icon:'&#xe658;',title:'点位2',id:'966'}">点位2</a>
                 </li>
+                -->
                 <li class="layui-nav-item">
-                    <a href="javascript:;">点位3</a>
+                    <a href="javascript:;">审批中心</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">子级点位1</a></dd>
-                        <dd><a href="javascript:;">子级点位2</a></dd>
+                        <dd><a href="javascript:;" kit-target data-options="{url:'/wait/list',icon:'&#xe658;',title:'我的待办',id:'1'}"><span>我的待办</span></a></dd>
+                        <dd><a href="javascript:;" kit-target data-options="{url:'/wait/finishedList',icon:'&#xe658;',title:'我的已办',id:'2'}"><span>我的已办</span></a></dd>
                     </dl>
                 </li>
             </ul>
@@ -117,6 +119,6 @@
 <script src="/js/tools/main.js"></script>
 <script src="/plugin/tools/tool.js"></script>
 <script type="text/javascript">
-    //pullMessage(1, 'messageCount');
+    pullMessage(1, 'messageCount');
 </script>
 </html>
