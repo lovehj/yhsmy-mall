@@ -175,6 +175,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put ("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put ("/login", "anon");
         filterChainDefinitionMap.put ("/verifyCode", "anon");
+        filterChainDefinitionMap.put ("/wechat/**", "anon");
 
         // 需要拦截的资源
         filterChainDefinitionMap.put ("logout", "logout");

@@ -76,6 +76,12 @@
             <artifactId>poi-ooxml-schemas</artifactId>
         </dependency>
 
+        <!-- dom4j -->
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+        </dependency>
+
     </dependencies>
 
     <!-- 把resouces目录下的资源文件打包上 -->

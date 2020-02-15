@@ -1,5 +1,10 @@
 server:
   port: 8900
+#  ssl:
+#    key-store: classpath:3439323_erp.yhsmy.com.pfx
+#    key-store-password: 2Cd464GW
+#    key-store-type: PKCS12
+    #key-alias: erp.yhsmy.com
 
 # 激活环境
 spring:
@@ -29,4 +34,6 @@ mybatis:
   mapper-locations: classpath*:com/yhsmy/mapper/**/*Mapper.xml
   configuration:
     map-underscore-to-camel-case: true #开启驼峰命名法自动转换
+
+
 

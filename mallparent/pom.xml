@@ -45,6 +45,8 @@
         <commons.codec.version>1.13</commons.codec.version>
         <geoip.version>2.13.0</geoip.version>
         <poi.version>4.1.1</poi.version>
+        <ueditor.version>1.4.3.3</ueditor.version>
+        <dom4j.version>1.6.1</dom4j.version>
     </properties>
 
     <dependencyManagement>
@@ -305,6 +307,27 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml-schemas</artifactId>
                 <version>${poi.version}</version>
+            </dependency>
+
+            <!-- 百度富文本编辑器 -->
+            <dependency>
+                <groupId>com.gitee.qdbp.thirdparty</groupId>
+                <artifactId>ueditor</artifactId>
+                <version>${ueditor.version}</version>
+            </dependency>
+
+            <!-- dom4j -->
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>${dom4j.version}</version>
+            </dependency>
+
+            <!--quartz依赖-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-quartz</artifactId>
+                <version>${springboot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -105,3 +105,4 @@ fdfs:
     max-total-per-key: 50 #每个key最大连接数
     max-idle-per-key: 10 #每个key对应的连接池最大空闲连接数
     max_idle_per_key: 5 #每个key对应的连接池最小空闲连接数
+
