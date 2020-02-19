@@ -1,0 +1,11 @@
+##ignore this file##
+/target/
+
+.classpath
+.project
+.settings
+ ##filter databfile、sln file##
+*.mdb
+*.ldb
+*.sln
+*.iml
