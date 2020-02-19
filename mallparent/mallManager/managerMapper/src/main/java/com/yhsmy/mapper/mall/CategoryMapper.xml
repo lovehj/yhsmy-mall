@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.mall.CategoryMapper">
+    <sql id="categoryFields">
+       cateId,cateName,catePId,cateSort,remark,state,creator,createTime,modifyor,modifyTime
+    </sql>
+
+    <sql id="categoryTable">
+        smy_category
+    </sql>
+
+    <insert id="addCategory" parameterType="Category">
+        insert into <include refid="categoryTable" />
+        (<include refid="categoryFields"/>)
+        values
+        (#{cateId},#{cateName},#{catePId},#{cateSort},#{remark},
+        #{state},#{creator},#{createTime},#{modifyor},#{modifyTime})
+    </insert>
+
+    <resultMap id="categoryResultMap" type="Category">
+        <id property="cateId" column="cateId"/>
+        <id property="cateName" column="cateName"/>
+        <id property="catePId" column="catePId" />
+        <id property="cateSort" column="cateSort" />
+        <id property="remark" column="remark" />
+        <id property="state" column="state" />
+        <id property="creator" column="creator" />
+        <id property="createTime" column="createTime"/>
+        <id property="modifyor" column="modifyor"/>
+        <id property="modifyTime" column="modifyTime"/>
+        <collection property="children" ofType="Category" column="cateId" select="findCategoryByPid">
+        </collection>
+    </resultMap>
+
+    <select id="findCategoryList" resultMap="categoryResultMap">
+        select <include refid="categoryFields"/>
+        from <include refid="categoryTable"/>
+        where state > 0
+        <if test="queryBy > 0 and queryText != null and queryText != ''.toString()">
+            <if test="queryBy == 1">
+                and INSTR(cateName, #{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 2">
+                and catePId = #{queryText}
+            </if>
+        </if>
+        <if test="queryBy == 3 and queryText == null and queryText == ''.toString()">
+            and (catePId = '' or catePId is null)
+        </if>
+        order by createTime asc
+    </select>
+
+    <select id="maxCategory" resultType="int">
+        select IFNULL(max(cateSort),0) as maxNum
+        from <include refid="categoryTable"/>
+        where 1 = 1
+        <if test="parentId != null and parentId != ''.toString()">
+            and catePId = #{parentId}
+        </if>
+    </select>
+
+    <select id="findCategoryById" resultType="Category">
+        select <include refid="categoryFields"/>
+        from <include refid="categoryTable"/>
+        where cateId = #{id}
+        limit 1
+    </select>
+
+    <select id="findCategoryByPid" resultType="Category">
+        select <include refid="categoryFields"/>
+        from <include refid="categoryTable"/>
+        where catePId = #{catePId}
+    </select>
+
+
+
+</mapper>

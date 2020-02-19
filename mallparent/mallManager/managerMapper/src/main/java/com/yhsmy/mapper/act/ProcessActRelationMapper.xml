@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.act.ProcessActRelationMapper">
+    <sql id="precessActRelationFields">
+       id,processKey,processName,description,modelId,state,creator,createTime
+    </sql>
+
+    <sql id="precessActRelationTable">
+        smy_process_act_relation
+    </sql>
+
+    <insert id="addProcessActRelation" parameterType="ProcessActRelation">
+        insert into <include refid="precessActRelationTable" />
+        (<include refid="precessActRelationFields"/>)
+        values
+        (#{id},#{processKey},#{processName},#{description},#{modelId},#{state},#{creator},#{createTime})
+    </insert>
+
+    <select id="findProcessActRelationList" resultType="ProcessActRelation">
+        select <include refid="precessActRelationFields"/>,
+        model.META_INFO_ as metaInfo,
+        model.VERSION_ as version, model.DEPLOYMENT_ID_ as deploymentId,
+        model.EDITOR_SOURCE_VALUE_ID_ as xmlSourceId,
+        model.EDITOR_SOURCE_EXTRA_VALUE_ID_ as imgSourceId
+        from <include refid="precessActRelationTable"/>
+        <if test="leftModel">
+            left join ACT_RE_MODEL model on model.ID_ = modelId
+        </if>
+        where state > 0
+        <if test="queryBy gt 0 and queryText != null and queryText != ''.toString()">
+            <if test="queryBy == 1">
+                and processKey = #{queryText}
+            </if>
+
+            <if test="queryBy == 2">
+                and INSTR(processName, #{queryText})>0
+            </if>
+
+            <if test="queryBy == 3">
+                and INSTR(description, #{queryText})>0
+            </if>
+        </if>
+
+        <if test="queryDate == 1">
+            <if test="startDate != null and startDate != ''.toString()">
+                and <![CDATA[ createTime >= #{startDate}  ]]>
+            </if>
+
+            <if test="endDate != null and endDate != ''.toString()">
+                and <![CDATA[ createTime <= #{endDate}  ]]>
+            </if>
+        </if>
+    </select>
+
+    <select id="findProcessActRelationById" resultType="ProcessActRelation">
+        select <include refid="precessActRelationFields"/>
+        from <include refid="precessActRelationTable"/>
+        where id = #{id}
+        limit 1
+    </select>
+
+
+
+
+</mapper>

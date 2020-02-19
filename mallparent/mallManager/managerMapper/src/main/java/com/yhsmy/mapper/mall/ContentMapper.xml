@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.mall.ContentMapper">
+    <sql id="contentFields">
+       contentId,conentCateId,userId,title,subTitle,description,linkUrl,picUrl,content,contentSort,state,creator,createTime,modifyer,modifyTime
+    </sql>
+
+    <sql id="contentAliasFields">
+       c.contentId,c.conentCateId,c.userId,c.title,c.subTitle,c.description,c.linkUrl,c.picUrl,c.content,c.contentSort,c.state,c.creator,c.createTime,c.modifyer,c.modifyTime
+    </sql>
+
+    <sql id="contentTable">
+        smy_content
+    </sql>
+
+    <insert id="addContent" parameterType="Content">
+        insert into <include refid="contentTable" />
+        (<include refid="contentFields"/>)
+        values
+        (#{contentId},#{conentCateId},#{userId},#{title},#{subTitle},#{description},#{linkUrl},#{picUrl},
+        #{content},#{contentSort},#{state},#{creator},#{createTime},#{modifyer},#{modifyTime})
+    </insert>
+
+    <select id="findContentList" resultType="Content">
+        select <include refid="contentAliasFields"/>
+        <if test="leftContentCate">
+            ,cc.cateName as contentCateName
+        </if>
+        from <include refid="contentTable"/> c
+        <if test="leftContentCate">
+          left join smy_content_cate cc on cc.cateId = c.conentCateId
+        </if>
+        where c.state > 0
+        <if test="userId != null and userId != ''.toString()">
+            and c.userId  =#{userId}
+        </if>
+
+        <if test="state > 0">
+            and c.state = #{state}
+        </if>
+
+        <if test="queryBy > 0 and queryText != null and queryText != ''.toString()">
+            <if test="queryBy == 1">
+                and c.conentCateId = #{queryText}
+            </if>
+
+            <if test="queryBy == 2">
+                and INSTR(c.title, #{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 3">
+                and INSTR(c.subTitle, #{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 4">
+                and INSTR(c.description, #{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 5">
+                and INSTR(c.content, #{queryText}) > 0
+            </if>
+        </if>
+        order by createTime asc
+    </select>
+
+    <select id="findMaxContentSort" resultType="int">
+        select IFNULL(max(contentSort),0) as maxSort
+        from <include refid="contentTable"/>
+        where 1 = 1
+        <if test="conentCateId != null and conentCateId != ''.toString()">
+            and conentCateId = #{conentCateId}
+        </if>
+    </select>
+
+    <select id="findContentById" resultType="Content">
+        select <include refid="contentFields"/>
+        from <include refid="contentTable"/>
+        where contentId = #{contentId}
+        limit 1
+    </select>
+
+    <sql id="contentCateFields">
+        cateId,cateName,ctype,catePid,state,creator,createTime,modifyer,modifyTime
+    </sql>
+
+    <sql id="contentCateAliasFields">
+        cc.cateId,cc.cateName,cc.ctype,cc.catePid,cc.state,cc.creator,cc.createTime,cc.modifyer,cc.modifyTime
+    </sql>
+
+    <sql id="contentCateTable">
+        smy_content_cate
+    </sql>
+
+    <insert id="addContentCate" parameterType="ContentCate">
+        insert into <include refid="contentCateTable" />
+        (<include refid="contentCateFields"/>)
+        values
+        (#{cateId},#{cateName},#{ctype},#{catePid},#{state},#{creator},#{createTime},#{modifyer},#{modifyTime})
+    </insert>
+
+    <select id="findContentCateList" resultType="ContentCate">
+        select <include refid="contentCateAliasFields"/>
+        from <include refid="contentCateTable"/> cc
+        where cc.state > 0
+        <if test="queryBy > 0 and queryText != null and queryText != ''.toString()">
+            <if test="queryBy == 1">
+                and INSTR(cc.cateName, #{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 2">
+                and cc.catePid = #{queryText}
+            </if>
+        </if>
+        order by createTime asc
+    </select>
+
+    <select id="findContentCateById" resultType="ContentCate">
+        select <include refid="contentCateAliasFields"/>
+        from <include refid="contentCateTable"/> cc
+        where cc.cateId  =#{cateId}
+        limit 1
+    </select>
+</mapper>

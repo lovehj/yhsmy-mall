@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.act.LeaveMapper">
+    <sql id="leaveFields">
+       leaveId,userId,days,content,startDate,endDate,state,creator,createTime,modifyor,modifyTime
+    </sql>
+
+    <sql id="leaveTable">
+        smy_leave
+    </sql>
+
+    <insert id="addLeave" parameterType="Leave">
+        insert into <include refid="leaveTable" />
+        (<include refid="leaveFields"/>)
+        values
+        (#{leaveId},#{userId},#{days},#{content},#{startDate},#{endDate},
+        #{state},#{creator},#{createTime},#{modifyor},#{modifyTime})
+    </insert>
+
+
+    <select id="findLeaveList" resultType="Leave">
+        select <include refid="leaveFields"/>
+        from <include refid="leaveTable"/>
+        where state > 0
+        <if test="state > 0 ">
+            and state = #{state}
+        </if>
+        <if test="userId != null and userId != ''.toString()">
+            and userId  =#{userId}
+        </if>
+
+        <if test="queryBy gt 0 and queryText != null and queryText != ''.toString()">
+            <if test="queryBy == 1">
+                and creator = #{queryText}
+            </if>
+
+            <if test="queryBy == 2">
+                and INSTR(content, #{queryText})>0
+            </if>
+        </if>
+
+        <if test="startDate != null and startDate != ''.toString()">
+            <if test="queryDate == 1">
+                and <![CDATA[ startDate >= #{startDate}  ]]>
+            </if>
+            <if test="queryDate == 2">
+                and <![CDATA[ endDate >= #{startDate}  ]]>
+            </if>
+            <if test="queryDate == 3">
+                and <![CDATA[ createTime >= #{startDate}  ]]>
+            </if>
+        </if>
+
+        <if test="endDate != null and endDate != ''.toString()">
+            <if test="queryDate == 1">
+                and <![CDATA[ startDate <= #{endDate} ]]>
+            </if>
+            <if test="queryDate == 2">
+                and <![CDATA[ endDate <= #{endDate} ]]>
+            </if>
+            <if test="queryDate == 3">
+                and <![CDATA[ createTime <= #{endDate}  ]]>
+            </if>
+        </if>
+
+    </select>
+
+    <select id="findLeaveById" resultType="Leave">
+        select <include refid="leaveFields"/>
+        from <include refid="leaveTable"/>
+        where leaveId = #{leaveId}
+        limit 1
+    </select>
+
+    <select id="findLeaveListByProcessInstanceId" resultType="Leave">
+        select <include refid="leaveFields"/>
+        from smy_business_audit
+        left join  <include refid="leaveTable"/> on leaveId = businessId
+        where processInstanceId = #{processInstanceId}
+        limit 1
+    </select>
+
+</mapper>

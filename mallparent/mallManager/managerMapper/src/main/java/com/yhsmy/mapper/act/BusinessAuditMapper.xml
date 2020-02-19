@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.act.BusinessAuditMapper">
+
+    <sql id="businessAuditFields">
+       ba.businessId,ba.businessKey,ba.processInstanceId,ba.remark,ba.auditState
+    </sql>
+
+    <sql id="businessAuditTable">
+        smy_business_audit
+    </sql>
+
+    <insert id="addBusinessAudit" parameterType="BusinessAudit">
+        insert into <include refid="businessAuditTable" />
+        (businessId,businessKey,processInstanceId,remark,auditState)
+        values
+        (#{businessId},#{businessKey},#{processInstanceId},#{remark},#{auditState})
+    </insert>
+
+
+    <select id="findBussinessAuditList" resultType="BusinessAudit">
+        select <include refid="businessAuditFields"/>
+        from <include refid="businessAuditTable"/> ba
+        where ba.auditState > 0
+
+        <if test="bussinessId != null and bussinessId != ''.toString()">
+            and ba.businessId = #{bussinessId}
+        </if>
+
+        <if test="startKey != null and startKey != ''.toString()">
+            and ba.businessKey =#{startKey}
+        </if>
+
+    </select>
+
+    <select id="findBussinessAudit" resultType="BusinessAudit">
+        select <include refid="businessAuditFields"/>
+        from <include refid="businessAuditTable"/> ba
+        where ba.auditState > 0
+
+        <if test="bussinessId != null and bussinessId != ''.toString()">
+            and ba.businessId = #{bussinessId}
+        </if>
+
+        <if test="startKey != null and startKey != ''.toString()">
+            and ba.businessKey =#{startKey}
+        </if>
+
+        <if test="processInstanceId != null and processInstanceId != ''.toString()">
+            and ba.processInstanceId =#{processInstanceId}
+        </if>
+    </select>
+
+</mapper>

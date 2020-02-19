@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.mall.ItemMapper">
+    <sql id="itemFields">
+       itemId,userId,title,sellPoint,price,disPrice,itemNum,leftItemNum,itemImg,categoryId,state,creator,createTime,modifyor,modifyTime
+    </sql>
+    <sql id="itemAliasFields">
+       item.itemId,item.userId,item.title,item.sellPoint,item.price,item.disPrice,item.itemNum,item.leftItemNum,item.itemImg,item.categoryId,item.state,item.creator,item.createTime,item.modifyor,item.modifyTime
+    </sql>
+
+    <sql id="itemTable">
+        smy_item
+    </sql>
+
+    <sql id="categoryTable">
+        smy_category
+    </sql>
+
+    <insert id="addItem" parameterType="Item">
+        insert into <include refid="itemTable" />
+        (<include refid="itemFields"/>)
+        values
+        (#{itemId},#{userId},#{title},#{sellPoint},#{price},#{disPrice},#{itemNum},#{leftItemNum},#{itemImg},#{categoryId},
+         #{state},#{creator},#{createTime},#{modifyor},#{modifyTime})
+    </insert>
+
+    <select id="findItemList" resultType="Item">
+        select <include refid="itemAliasFields"/>,cateName
+        from <include refid="itemTable"/> as item
+        left join <include refid="categoryTable"/> as c on c.cateId = item.categoryId
+        where item.state > 0
+        <if test="state > 0">
+            and item.state = #{state}
+        </if>
+
+        <if test="queryBy > 0 and queryText != null and queryText != ''.toString()">
+            <if test="queryBy == 1">
+                and INSTR(item.title, #{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 2">
+                and INSTR(item.sellPoint, #{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 3">
+                and item.categoryId = #{queryText}
+            </if>
+        </if>
+    </select>
+
+    <select id="findItemById" resultType="Item">
+        select <include refid="itemFields"/>
+        from <include refid="itemTable"/>
+        where itemId = #{id}
+        limit 1
+    </select>
+
+    <select id="findItemByProcessInstanceId" resultType="Item">
+        select <include refid="itemFields"/>,remark,processInstanceId
+        from  smy_business_audit
+        left join  <include refid="itemTable"/> on itemId = businessId
+        where processInstanceId = #{processInstanceId}
+        limit 1
+    </select>
+
+
+
+</mapper>

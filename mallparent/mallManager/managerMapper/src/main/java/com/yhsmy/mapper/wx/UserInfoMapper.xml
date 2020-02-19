@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.wx.UserInfoMapper">
+    <sql id="userInfoFields">
+       openid,subscribe,nickname,sex,city,country,province,language,headimgurl,subscribe_time,unionid,remark,groupid,
+       tagid_list,subscribe_scene,qr_scene,qr_scene_str,state,creator,createTime,modifyor,modifyTime
+    </sql>
+
+    <sql id="userInfoTable">
+        smy_depart
+    </sql>
+
+    <insert id="addUserInfo" parameterType="UserInfo">
+        insert into <include refid="userInfoTable" />
+        (<include refid="userInfoFields"/>)
+        values
+        (#{openid},#{subscribe},#{nickname},#{sex},#{city},#{country},#{province},#{language},#{headimgurl},#{subscribe_time},
+        #{unionid},#{remark},#{groupid},#{tagid_list},#{subscribe_scene},#{qr_scene},#{qr_scene_str},#{state},#{creator},#{createTime},#{modifyor},#{modifyTime})
+    </insert>
+    
+    <select id="findUserInfoList" resultType="UserInfo">
+        select
+        <include refid="userInfoFields" />
+        from <include refid="userInfoTable" />
+        where state > 0
+        <if test="queryBy>0 and queryText != null and queryText != ''.toString()">
+            <if test="queryBy == 1">
+                and INSTR(nickname,#{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 2">
+                and INSTR(province,#{queryText}) > 0
+            </if>
+
+            <if test="queryBy == 3">
+                and INSTR(city,#{queryText}) > 0
+            </if>
+
+        </if>
+        order by createTime desc
+    </select>
+
+    <select id="findUserInfo" resultType="UserInfo">
+        select
+        <include refid="userInfoFields" />
+        from <include refid="userInfoTable" />
+        where openid = #{openId}
+        limit 1
+    </select>
+
+</mapper>

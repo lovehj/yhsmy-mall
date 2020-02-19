@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhsmy.mapper.wx.TagMapper">
+    <sql id="tagFields">
+       id,name,state,creator,createTime,modifyor,modifyTime
+    </sql>
+
+    <sql id="tagTable">
+        smy_wx_tag
+    </sql>
+
+    <insert id="addTag" parameterType="Tag">
+        insert into
+        <include refid="tagTable"/>
+        (<include refid="tagFields"/>)
+        values
+        (#{id},#{name},#{state},#{creator},#{createTime},#{modifyor},#{modifyTime})
+    </insert>
+
+    <select id="findTagList" resultType="Tag">
+        select
+        <include refid="tagFields"/>
+        from
+        <include refid="tagTable"/>
+        where state > 0
+        <if test="name != null and name != ''.toString()">
+            and INSTR(name, #{name}) > 0
+        </if>
+        order by createTime desc
+    </select>
+
+    <select id="findTag" resultType="Tag">
+        select
+        <include refid="tagFields"/>
+        from
+        <include refid="tagTable"/>
+        where id = #{id}
+        limit 1
+    </select>
+
+</mapper>
