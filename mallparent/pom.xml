@@ -47,6 +47,7 @@
         <poi.version>4.1.1</poi.version>
         <ueditor.version>1.4.3.3</ueditor.version>
         <dom4j.version>1.6.1</dom4j.version>
+        <apache.beanUtil.version>1.9.4</apache.beanUtil.version>
     </properties>
 
     <dependencyManagement>
@@ -328,6 +329,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-quartz</artifactId>
                 <version>${springboot.version}</version>
+            </dependency>
+
+            <!-- apache bean工具 -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${apache.beanUtil.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

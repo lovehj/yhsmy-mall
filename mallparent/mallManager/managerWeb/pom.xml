@@ -59,11 +59,11 @@
             <artifactId>ueditor</artifactId>
         </dependency>
 
-        <!--quartz依赖-->
+        <!--quartz依赖
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
 
