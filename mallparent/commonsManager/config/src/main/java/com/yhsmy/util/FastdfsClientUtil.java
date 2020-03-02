@@ -8,6 +8,7 @@ import com.yhsmy.entity.FileLib;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -26,29 +27,12 @@ public class FastdfsClientUtil {
     @Autowired
     private FdfsWebServer fdfsWebServer;
 
+    public FileLib upload(MultipartFile multipartFile) throws Exception {
+        return this.uploadFile(multipartFile, null);
+    }
 
-    public FileLib upload (MultipartFile multipartFile) throws Exception {
-        if (multipartFile.isEmpty ()) {
-            return null;
-        }
-        FileLib fileLib = new FileLib ();
-        // 获取原始文件名
-        String origianlFileName = multipartFile.getOriginalFilename ();
-        fileLib.setFileName (origianlFileName);
-        origianlFileName = origianlFileName.substring (origianlFileName.lastIndexOf (".") + 1);
-
-        // 文件扩展名
-        String ext = origianlFileName.substring (origianlFileName.lastIndexOf (".") + 1, origianlFileName.length ());
-        fileLib.setTableType (fileLib.getFileCtype (ext));
-        fileLib.setContentType (multipartFile.getContentType ());
-
-        StorePath storePath = fastFileStorageClient.
-                uploadImageAndCrtThumbImage (multipartFile.getInputStream (), multipartFile.getSize (), origianlFileName, null);
-
-        fileLib.setFilePath (storePath.getFullPath ());
-        fileLib.setFileSize (multipartFile.getSize ());
-        fileLib.setUrlPrefix (fdfsWebServer.getWebServerUrl ());
-        return fileLib;
+    public FileLib upload(MultipartFile multipartFile, String groupName) throws Exception {
+        return this.uploadFile(multipartFile, groupName);
     }
 
     /**
@@ -58,8 +42,8 @@ public class FastdfsClientUtil {
      * @param path
      * @return
      */
-    public byte[] downLoad (String group, String path) {
-        return fastFileStorageClient.downloadFile (group, path, new DownloadByteArray ());
+    public byte[] downLoad(String group, String path) {
+        return fastFileStorageClient.downloadFile(group, path, new DownloadByteArray());
     }
 
     /**
@@ -67,8 +51,8 @@ public class FastdfsClientUtil {
      *
      * @param path
      */
-    public void delete (String path) throws Exception {
-        fastFileStorageClient.deleteFile (path);
+    public void delete(String path) throws Exception {
+        fastFileStorageClient.deleteFile(path);
     }
 
     /**
@@ -76,8 +60,41 @@ public class FastdfsClientUtil {
      *
      * @return 附件地址前缀
      */
-    public String getFdfsWebUrlPrefix () {
-        return "http://"+fdfsWebServer.getWebServerUrl ();
+    public String getFdfsWebUrlPrefix() {
+        return "http://" + fdfsWebServer.getWebServerUrl();
+    }
+
+    private FileLib uploadFile(MultipartFile multipartFile, String groupName) throws Exception {
+        if (multipartFile.isEmpty()) {
+            return null;
+        }
+        FileLib fileLib = new FileLib();
+        // 获取原始文件名
+        String origianlFileName = multipartFile.getOriginalFilename();
+        fileLib.setFileName(origianlFileName);
+        origianlFileName = origianlFileName.substring(origianlFileName.lastIndexOf(".") + 1);
+
+        // 文件扩展名
+        String ext = origianlFileName.substring(origianlFileName.lastIndexOf(".") + 1, origianlFileName.length());
+        fileLib.setTableType(fileLib.getFileCtype(ext));
+        fileLib.setContentType(multipartFile.getContentType());
+
+        try {
+            StorePath storePath = null;
+            if (StringUtils.isEmpty(groupName)) {
+                storePath = fastFileStorageClient.
+                        uploadImageAndCrtThumbImage(multipartFile.getInputStream(), multipartFile.getSize(), origianlFileName, null);
+            } else {
+                storePath = fastFileStorageClient.uploadFile(groupName, multipartFile.getInputStream(), multipartFile.getSize(), origianlFileName);
+            }
+            fileLib.setFilePath(storePath.getFullPath());
+        } catch (Exception e) {
+            log.error("上传文件到fastdfs失败!", e);
+            fileLib.setFilePath("");
+        }
+        fileLib.setFileSize(multipartFile.getSize());
+        fileLib.setUrlPrefix(fdfsWebServer.getWebServerUrl());
+        return fileLib;
     }
 
 }
