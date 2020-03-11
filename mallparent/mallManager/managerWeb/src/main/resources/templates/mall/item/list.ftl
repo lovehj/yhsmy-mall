@@ -40,6 +40,9 @@
                     <a class="layui-btn layui-btn-normal activeBtn" data-type="itemAdd">
                         <i class="layui-icon">&#xe608;</i>新增
                     </a>
+                    <a class="layui-btn layui-btn-normal activeBtn" data-type="itemUeditorAdd">
+                        <i class="layui-icon">&#xe608;</i>多图及百度编辑器
+                    </a>
                 </@shiro.hasPermission>
 
                 <a class="layui-btn layui-btn-sm icon-position-button activeBtn" style="float: right;" data-type="itemReload">

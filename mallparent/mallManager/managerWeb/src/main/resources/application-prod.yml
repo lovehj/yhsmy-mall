@@ -2,7 +2,7 @@
 logging:
   file: /dataFile/yhsmy/logs/yhsmy.log
   level:
-    com.yhsmy: debug
+    com.yhsmy: info
 
 #配置数据源
 spring:
@@ -80,15 +80,14 @@ spring:
 
 # 配置fastdfs
 fdfs:
-  connect-timeout: 601
+  connect-timeout: 1601
   so-timeout: 1501
   thumb-image:
     width: 150
     height: 150
   web-server-url: 118.25.187.65:8400
   tracker-list:
-  - 172.17.0.16:22122
-  - 118.25.187.65:22122
+    - 118.25.187.65:22122
   pool:
     max-total: -1
     max-wait-millis: 5000
@@ -104,3 +103,6 @@ wx:
   wechatPrifix: https://api.weixin.qq.com/ #微信公众号的前缀部分
   wechatMiddlePart: cgi-bin/ #微信公众号URL的中间部分
   robot: http://api.qingyunke.com/api.php?key=free&appid=0&msg= #青云客聊天机器人qingyunke
+  tencentMapKey: 4KVBZ-U4NLD-PKF4O-HWEJL-QYAO3-LCFQG #腾讯地图提供的webservice服务KEY
+  tencentMapUrlPirfix: https://apis.map.qq.com/ws/ #腾讯地图提供的webservice服务
+

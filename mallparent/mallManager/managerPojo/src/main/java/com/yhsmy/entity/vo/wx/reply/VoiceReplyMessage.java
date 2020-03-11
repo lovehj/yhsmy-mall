@@ -21,7 +21,7 @@ public class VoiceReplyMessage extends BaseReplyMessage {
     private Voice Voice;
 
     @Data
-    class Voice implements Serializable {
+    public static class Voice implements Serializable {
 
         /**
          * 通过素材管理中的接口上传多媒体文件，得到的id

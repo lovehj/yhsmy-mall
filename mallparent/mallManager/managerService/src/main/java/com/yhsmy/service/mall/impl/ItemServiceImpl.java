@@ -112,7 +112,7 @@ public class ItemServiceImpl implements ItemServiceI {
             if(item.getItemNum () > 0) {
                 updateMap.addField ("itemNum", item.getItemNum ());
                 // 商品数量要大于库存余量
-                updateMap.addWhere ("leftItemNum", item.getItemNum (), "<");
+                updateMap.addWhere ("leftItemNum", item.getItemNum (), "<=");
             }
             updateMap.addField ("itemImg", item.getItemImg ());
             updateMap.addField ("categoryId", item.getCategoryId ());
@@ -124,6 +124,7 @@ public class ItemServiceImpl implements ItemServiceI {
             }
         } else {
             item.setItemId (UUIDUtil.generateUUID ());
+            item.setUserId(user.getId());
             item.setLeftItemNum (item.getItemNum ());
             item.setState (NormalEnum.NORMAL.getKey ());
             item.setCreator (cname);

@@ -135,3 +135,9 @@
 .w800 {
     width: 800px !important;
 }
+.multiFile {
+    width: 100px;
+    height: 100px;
+    float: left;
+    padding-left: 5px;
+}

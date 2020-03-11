@@ -111,4 +111,17 @@ public class ItemController extends BaseController {
         return itemServiceI.delete (ctype, id, ShiroUtil.getUser ());
     }
 
+    @GetMapping("ueditorForm")
+    public String ueditorForm() {
+        return "mall/item/ueditorForm";
+    }
+
+    @PostMapping("ueditorFormSubmit")
+    @ResponseBody
+    public Json ueditorFormSubmit(String content, String imageIds,String itemImg) {
+        System.out.println("itemImg= " + itemImg);
+        System.out.println("imageIds= "+imageIds);
+        System.out.println("content= " + content);
+        return Json.ok();
+    }
 }

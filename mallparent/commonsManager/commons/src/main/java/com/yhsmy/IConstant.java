@@ -87,6 +87,8 @@ public class IConstant {
 
     public static final String MALL_URL = "https://www.yhsmy.com";
 
+    public static final String FDFS_UEDITOR_GROUP = "ueditor";
+
     /**
      * 微信消息类型
      */

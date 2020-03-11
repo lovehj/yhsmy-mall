@@ -53,6 +53,9 @@ layui.use(['table'],function(){
         },
         itemAdd:function () {
             dialog(title, formUrl,width, heigth);
+        },
+        itemUeditorAdd:function () {
+            dialog(title, "/item/ueditorForm",1000, 350);//750
         }
     }
 

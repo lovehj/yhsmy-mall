@@ -106,3 +106,16 @@ fdfs:
     max-idle-per-key: 10 #每个key对应的连接池最大空闲连接数
     max_idle_per_key: 5 #每个key对应的连接池最小空闲连接数
 
+#整合微信
+wx:
+  appId: wx78c97398886ecc72
+  appSecret: b43ec1253ca937c055d1e5ae240f5ca3
+  token: $yhsmy$ #微信公众号的token
+  wechatPrifix: https://api.weixin.qq.com/ #微信公众号的前缀部分
+  wechatMiddlePart: cgi-bin/ #微信公众号URL的中间部分
+  robot: http://api.qingyunke.com/api.php?key=free&appid=0&msg= #青云客聊天机器人qingyunke
+
+#百度地址相关web api服役
+baidu:
+  ak: ppDRO1R2wX3GffAHGRbs5e0x #百度map的ak
+  apiPirfix: http://api.map.baidu.com/ #百度API请求前缀
