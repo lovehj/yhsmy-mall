@@ -24,7 +24,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <yhsmy.version>1.0-SNAPSHOT</yhsmy.version>
-        <springboot.version>2.1.9.RELEASE</springboot.version>
+        <springboot.version>2.5.12</springboot.version>
         <mybatis.version>2.1.1</mybatis.version>
         <activiti.mybatis.version>3.5.3</activiti.mybatis.version>
         <druid.version>1.1.21</druid.version>
